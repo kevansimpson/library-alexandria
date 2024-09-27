@@ -1,7 +1,6 @@
 package com.aravo.library.service;
 
-import com.aravo.library.data.Author;
-import com.aravo.library.data.entity.AuthorEntity;
+import com.aravo.library.data.entity.Author;
 import com.aravo.library.data.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,12 @@ public class LibraryService {
 
     public List<Author> getAuthors() {
         List<Author> authors = new ArrayList<>();
-        for (AuthorEntity a : authorRepository.findAll())
-            authors.add(new Author(a.getId(), a.getName()));
+        for (Author a : authorRepository.findAll())
+            authors.add(a);
         return authors;
+    }
+
+    public Author saveAuthor(Author author) {
+        return authorRepository.save(author);
     }
 }
