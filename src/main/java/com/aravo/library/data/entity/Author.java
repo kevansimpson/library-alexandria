@@ -14,12 +14,17 @@ import java.io.Serializable;
 @Table(name = "AUTHORS")
 public class Author implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length=50, nullable=false)
+    @Column(name = "first_name", length=50, nullable=false)
     private String firstName;
 
-    @Column(length=50, nullable=false)
+    @Column(name = "last_name", length=50, nullable=false)
     private String lastName;
+
+    public Author(String first, String last) {
+        firstName = first;
+        lastName = last;
+    }
 }
