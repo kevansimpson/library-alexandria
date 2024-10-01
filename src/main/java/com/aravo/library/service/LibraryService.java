@@ -1,7 +1,7 @@
 package com.aravo.library.service;
 
-import com.aravo.library.data.entity.Author;
-import com.aravo.library.data.repository.AuthorRepository;
+import com.aravo.library.data.entity.Work;
+import com.aravo.library.data.repository.WorkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,36 +9,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class LibraryService implements AuthorService {
-    private final AuthorRepository authorRepository;
+public class LibraryService implements WorkService {
+    private final WorkRepository workRepository;
 
     @Autowired
-    public LibraryService(AuthorRepository repository) {
-        authorRepository = repository;
+    public LibraryService(WorkRepository repository) {
+        workRepository = repository;
     }
 
-    public List<Author> fetchAuthors() {
-        List<Author> authors = new ArrayList<>();
-        for (Author a : authorRepository.findAll())
-            authors.add(a);
-        return authors;
+    @Override
+    public Work createWork(Work work) {
+        return workRepository.save(work);
     }
 
-    public Author findAuthorById(long id) {
-        return authorRepository.findById(id).orElse(null);
+    @Override
+    public List<Work> fetchWorks() {
+        List<Work> works = new ArrayList<>();
+        for (Work w : workRepository.findAll())
+            works.add(w);
+        return works;
     }
 
-    public Author createAuthor(Author author) {
-        return authorRepository.save(author);
+    @Override
+    public Work findWorkById(long id) {
+        return workRepository.findById(id).orElse(null);
     }
 
-    public Author updateAuthor(Author author) {
-        return authorRepository.save(author);
+    @Override
+    public Work updateWork(Work work) {
+        return workRepository.save(work);
     }
 
-    public Author deleteAuthor(Author author) {
-        // TODO check for existing works
-        authorRepository.delete(author);
-        return findAuthorById(author.getId());
+    @Override
+    public Work deleteWork(Work work) {
+        workRepository.delete(work);
+        return findWorkById(work.getId());
     }
 }
