@@ -26,13 +26,11 @@ public class Author implements Serializable {
     private String lastName;
 
     public Author(String first, String last) {
-        firstName = first;
-        lastName = last;
+        setFirstName(first);
+        setLastName(last);
     }
 
-    @ManyToMany(//fetch = FetchType.LAZY,
-//            cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-            mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors")
     @JsonIgnore
     private Set<Work> works = new HashSet<>();
 }

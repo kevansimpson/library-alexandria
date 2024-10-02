@@ -1,13 +1,15 @@
 package com.aravo.library.config;
 
+import com.aravo.library.data.WorkFormat;
 import com.aravo.library.data.entity.Author;
+import com.aravo.library.data.entity.AvailableFormats;
 import com.aravo.library.data.entity.Work;
-import com.aravo.library.data.repository.AuthorRepository;
-import com.aravo.library.data.repository.WorkRepository;
+import com.aravo.library.data.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class LibraryConfiguration {
     @Bean
     public CommandLineRunner loadSeedData(
             AuthorRepository authorRepository,
+            AvailableFormatsRepository formatsRepository,
             WorkRepository workRepository) {
         return (args) -> {
             Author mWeis = authorRepository.save(new Author("Margaret", "Weis"));
@@ -25,7 +28,11 @@ public class LibraryConfiguration {
 
             Work dhw = new Work("Demon Haunted World", Date.valueOf("1995-01-01"), true);
             dhw.addAuthor(cSagan);
+//            dhw.addFormat(new AvailableFormats(WorkFormat.TABLET));
             workRepository.save(dhw);
+            AvailableFormats tablet = new AvailableFormats(WorkFormat.TABLET);
+            dhw.addFormat(tablet);
+            formatsRepository.save(tablet);
 
             List<Work> deathGateCycle = List.of(
                     new Work("Dragon Wing", Date.valueOf("1990-02-01"), false),
@@ -40,6 +47,8 @@ public class LibraryConfiguration {
             deathGateCycle.forEach(work -> {
                 work.addAuthor(mWeis);
                 work.addAuthor(tHickman);
+//                work.addFormat(formatsRepository.save(
+//                        new AvailableFormats(WorkFormat.SCROLL, BigDecimal.valueOf(5.99))));
                 workRepository.save(work);
             });
 
@@ -47,6 +56,8 @@ public class LibraryConfiguration {
                     "Patterns of Enterprise Application Architecture",
                     Date.valueOf("2002-10-01"), false);
             patternsEAA.addAuthor(mFowler);
+//            patternsEAA.addFormat(formatsRepository.save(
+//                    new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99))));
             workRepository.save(patternsEAA);
         };
     }
