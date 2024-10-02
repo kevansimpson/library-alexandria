@@ -17,34 +17,34 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name = "WORKS")
+//@Entity
+//@Table(name = "WORKS")
 public class Work implements Serializable {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "work_id")
+//    @Column(name = "work_id")
     private long workId;
 
-    @Column(length=250, nullable=false)
+//    @Column(length=250, nullable=false)
     private String title;
 
-    @Column(nullable=false)
-    @Temporal(TemporalType.DATE)
+//    @Column(nullable=false)
+//    @Temporal(TemporalType.DATE)
     private Date published;
 
-    @Column
+//    @Column
     private boolean rare;
 
-    @ManyToMany
-    @JoinTable(name = "author_work_xref",
-            joinColumns = { @JoinColumn(name = "work_id") },
-            inverseJoinColumns = { @JoinColumn(name = "author_id") })
+//    @ManyToMany
+//    @JoinTable(name = "author_work_xref",
+//            joinColumns = { @JoinColumn(name = "work_id") },
+//            inverseJoinColumns = { @JoinColumn(name = "author_id") })
     private Set<Author> authors = new HashSet<>();
 
 //    @Fetch(FetchMode.SELECT)
-    @OneToMany(mappedBy = "work")
+//    @OneToMany(mappedBy = "work")
     private Set<AvailableFormats> formats = new HashSet<>();
 
     public Work(String name, Date publishedOn, boolean isRare) {
@@ -55,27 +55,27 @@ public class Work implements Serializable {
 
     public void addAuthor(Author author) {
         authors.add(author);
-        author.getWorks().add(this);
+//        author.getWorks().add(this);
     }
 
     public void removeAuthor(long authorId) {
         Author author = authors.stream().filter(a -> a.getId() == authorId).findFirst().orElse(null);
         if (author != null) {
             authors.remove(author);
-            author.getWorks().remove(this);
+//            author.getWorks().remove(this);
         }
     }
 
     public void addFormat(AvailableFormats format) {
         formats.add(format);
-        format.setWork(this);
+//        format.setWork(this);
     }
 
     public void removeFormat(long formatId) {
         AvailableFormats format = formats.stream().filter(a -> a.getId() == formatId).findFirst().orElse(null);
         if (format != null) {
             formats.remove(format);
-            format.setWork(null);
+//            format.setWork(null);
         }
     }
 }

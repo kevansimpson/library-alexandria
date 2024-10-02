@@ -5,7 +5,6 @@ import com.aravo.library.data.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,14 +17,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public List<Author> fetchAuthors() {
-        List<Author> authors = new ArrayList<>();
-        for (Author a : authorRepository.findAll())
-            authors.add(a);
-        return authors;
+        return authorRepository.findAll();
     }
 
     public Author findAuthorById(long id) {
-        return authorRepository.findById(id).orElse(null);
+        return authorRepository.findById(id);
     }
 
     public Author createAuthor(Author author) {

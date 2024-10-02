@@ -26,9 +26,10 @@ public class LibraryConfiguration {
             Author cSagan = authorRepository.save(new Author("Carl", "Sagan"));
             Author mFowler = authorRepository.save(new Author("Martin", "Fowler"));
 
+            /*
             Work dhw = new Work("Demon Haunted World", Date.valueOf("1995-01-01"), true);
             dhw.addAuthor(cSagan);
-//            dhw.addFormat(new AvailableFormats(WorkFormat.TABLET));
+            dhw.addFormat(new AvailableFormats(WorkFormat.TABLET));
             workRepository.save(dhw);
             AvailableFormats tablet = new AvailableFormats(WorkFormat.TABLET);
             dhw.addFormat(tablet);
@@ -59,6 +60,7 @@ public class LibraryConfiguration {
 //            patternsEAA.addFormat(formatsRepository.save(
 //                    new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99))));
             workRepository.save(patternsEAA);
+             */
         };
     }
 }

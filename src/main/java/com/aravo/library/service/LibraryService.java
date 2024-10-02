@@ -5,7 +5,6 @@ import com.aravo.library.data.repository.WorkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,15 +23,12 @@ public class LibraryService implements WorkService {
 
     @Override
     public List<Work> fetchWorks() {
-        List<Work> works = new ArrayList<>();
-        for (Work w : workRepository.findAll())
-            works.add(w);
-        return works;
+        return workRepository.findAll();
     }
 
     @Override
     public Work findWorkById(long id) {
-        return workRepository.findById(id).orElse(null);
+        return workRepository.findById(id);
     }
 
     @Override

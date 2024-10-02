@@ -12,17 +12,17 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name = "AUTHORS")
+//@Entity
+//@Table(name = "AUTHORS")
 public class Author implements Serializable {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "first_name", length=50, nullable=false)
+//    @Column(name = "first_name", length=50, nullable=false)
     private String firstName;
 
-    @Column(name = "last_name", length=50, nullable=false)
+//    @Column(name = "last_name", length=50, nullable=false)
     private String lastName;
 
     public Author(String first, String last) {
@@ -30,7 +30,7 @@ public class Author implements Serializable {
         setLastName(last);
     }
 
-    @ManyToMany(mappedBy = "authors")
-    @JsonIgnore
-    private Set<Work> works = new HashSet<>();
+//    @ManyToMany(mappedBy = "authors")
+//    @JsonIgnore
+//    private Set<Work> works = new HashSet<>();
 }
