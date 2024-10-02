@@ -1,25 +1,20 @@
 package com.aravo.library.data.entity;
 
+import com.aravo.library.data.Persistable;
 import com.aravo.library.data.WorkFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 //@Entity
 //@Table(name = "FORMATS")
-public class AvailableFormats implements Serializable {
+public class AvailableFormats implements Serializable, Persistable {
 //    @Id
 //    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;

@@ -27,13 +27,15 @@ public class LibraryConfiguration {
             Author mFowler = authorRepository.save(new Author("Martin", "Fowler"));
 
             /*
+SELECT a.*, w.*
+FROM WORKS w
+INNER JOIN AUTHOR_WORK_XREF x ON w.ID = x.WORK_ID
+INNER JOIN AUTHORS a ON x.AUTHOR_ID = a.ID
+             */
             Work dhw = new Work("Demon Haunted World", Date.valueOf("1995-01-01"), true);
             dhw.addAuthor(cSagan);
             dhw.addFormat(new AvailableFormats(WorkFormat.TABLET));
             workRepository.save(dhw);
-            AvailableFormats tablet = new AvailableFormats(WorkFormat.TABLET);
-            dhw.addFormat(tablet);
-            formatsRepository.save(tablet);
 
             List<Work> deathGateCycle = List.of(
                     new Work("Dragon Wing", Date.valueOf("1990-02-01"), false),
@@ -48,8 +50,7 @@ public class LibraryConfiguration {
             deathGateCycle.forEach(work -> {
                 work.addAuthor(mWeis);
                 work.addAuthor(tHickman);
-//                work.addFormat(formatsRepository.save(
-//                        new AvailableFormats(WorkFormat.SCROLL, BigDecimal.valueOf(5.99))));
+                work.addFormat(new AvailableFormats(WorkFormat.SCROLL, BigDecimal.valueOf(5.99)));
                 workRepository.save(work);
             });
 
@@ -57,10 +58,8 @@ public class LibraryConfiguration {
                     "Patterns of Enterprise Application Architecture",
                     Date.valueOf("2002-10-01"), false);
             patternsEAA.addAuthor(mFowler);
-//            patternsEAA.addFormat(formatsRepository.save(
-//                    new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99))));
+            patternsEAA.addFormat(new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99)));
             workRepository.save(patternsEAA);
-             */
         };
     }
 }

@@ -18,7 +18,7 @@ public class LibraryService implements WorkService {
 
     @Override
     public Work createWork(Work work) {
-        return workRepository.save(work);
+        return workRepository.create(work);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class LibraryService implements WorkService {
 
     @Override
     public Work updateWork(Work work) {
-        return workRepository.save(work);
+        return workRepository.update(work);
     }
 
     @Override

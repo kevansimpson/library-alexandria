@@ -25,11 +25,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public Author createAuthor(Author author) {
-        return authorRepository.save(author);
+        return authorRepository.create(author);
     }
 
     public Author updateAuthor(Author author) {
-        return authorRepository.save(author);
+        return authorRepository.update(author);
     }
 
     public Author deleteAuthor(Author author) {

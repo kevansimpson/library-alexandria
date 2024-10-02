@@ -20,6 +20,24 @@ public class AuthorRepository implements CrudRepository<Author>{
         template = jdbc;
     }
 
+    public List<Author> findAuthorsByWorkId(long workId) {
+        return template.query("SELECT DISTINCT a.* " +
+                "FROM WORKS w " +
+                "INNER JOIN AUTHOR_WORK_XREF x ON x.WORK_ID = ? " +
+                "INNER JOIN AUTHORS a ON x.AUTHOR_ID = a.ID",
+                new AuthorMapper(), workId);
+    }
+
+    @Override
+    public Author create(Author author) {
+        int update = template.update(
+                "INSERT INTO AUTHORS (FIRST_NAME, LAST_NAME) VALUES (?, ?)",
+                author.getFirstName(), author.getLastName());
+        return (update == 0) ? null
+                : template.queryForObject("SELECT * FROM AUTHORS WHERE FIRST_NAME = ? AND LAST_NAME = ?",
+                new AuthorMapper(), author.getFirstName(), author.getLastName());
+    }
+
     @Override
     public List<Author> findAll() {
         return template.query(
@@ -33,13 +51,11 @@ public class AuthorRepository implements CrudRepository<Author>{
     }
 
     @Override
-    public Author save(Author author) {
+    public Author update(Author author) {
         int update = template.update(
-                "INSERT INTO AUTHORS (FIRST_NAME, LAST_NAME) VALUES (?, ?)",
-                author.getFirstName(), author.getLastName());
-        return (update == 0) ? null
-                : template.queryForObject("SELECT * FROM AUTHORS WHERE FIRST_NAME = ? AND LAST_NAME = ?",
-                new AuthorMapper(), author.getFirstName(), author.getLastName());
+                "UPDATE AUTHORS SET FIRST_NAME = ?, LAST_NAME = ? WHERE ID = ?",
+                author.getFirstName(), author.getLastName(), author.getId());
+        return (update == 0) ? null : author;
     }
 
     @Override

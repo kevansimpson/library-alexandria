@@ -19,6 +19,11 @@ public class AvailableFormatsRepository implements CrudRepository<AvailableForma
     }
 
     @Override
+    public AvailableFormats create(AvailableFormats format) {
+        return null;
+    }
+
+    @Override
     public List<AvailableFormats> findAll() {
         return new ArrayList<>();
     }
@@ -29,7 +34,7 @@ public class AvailableFormatsRepository implements CrudRepository<AvailableForma
     }
 
     @Override
-    public AvailableFormats save(AvailableFormats format) {
+    public AvailableFormats update(AvailableFormats format) {
         return null;
     }
 

@@ -1,36 +1,22 @@
 package com.aravo.library.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
+import com.aravo.library.data.Persistable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-//@Entity
-//@Table(name = "AUTHORS")
-public class Author implements Serializable {
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.IDENTITY)
+@Data
+public class Author implements Serializable, Persistable {
     private long id;
-
-//    @Column(name = "first_name", length=50, nullable=false)
     private String firstName;
-
-//    @Column(name = "last_name", length=50, nullable=false)
     private String lastName;
 
     public Author(String first, String last) {
         setFirstName(first);
         setLastName(last);
     }
-
-//    @ManyToMany(mappedBy = "authors")
-//    @JsonIgnore
-//    private Set<Work> works = new HashSet<>();
 }
