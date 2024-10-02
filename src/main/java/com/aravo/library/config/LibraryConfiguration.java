@@ -34,7 +34,7 @@ INNER JOIN AUTHORS a ON x.AUTHOR_ID = a.ID
              */
             Work dhw = new Work("Demon Haunted World", Date.valueOf("1995-01-01"), true);
             dhw.addAuthor(cSagan);
-            dhw.addFormat(new AvailableFormats(WorkFormat.TABLET));
+            dhw.addFormat(formatsRepository.save(new AvailableFormats(WorkFormat.TABLET)));
             workRepository.save(dhw);
 
             List<Work> deathGateCycle = List.of(
@@ -50,7 +50,8 @@ INNER JOIN AUTHORS a ON x.AUTHOR_ID = a.ID
             deathGateCycle.forEach(work -> {
                 work.addAuthor(mWeis);
                 work.addAuthor(tHickman);
-                work.addFormat(new AvailableFormats(WorkFormat.SCROLL, BigDecimal.valueOf(5.99)));
+                work.addFormat(formatsRepository.save(
+                        new AvailableFormats(WorkFormat.SCROLL, BigDecimal.valueOf(5.99))));
                 workRepository.save(work);
             });
 
@@ -58,7 +59,8 @@ INNER JOIN AUTHORS a ON x.AUTHOR_ID = a.ID
                     "Patterns of Enterprise Application Architecture",
                     Date.valueOf("2002-10-01"), false);
             patternsEAA.addAuthor(mFowler);
-            patternsEAA.addFormat(new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99)));
+            patternsEAA.addFormat(formatsRepository.save(
+                    new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99))));
             workRepository.save(patternsEAA);
         };
     }

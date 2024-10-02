@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.aravo.library.data.repository.EntityRowMappers.newAvailableFormatsMapper;
 
 @Component
 public class AvailableFormatsRepository implements CrudRepository<AvailableFormats> {
@@ -18,28 +19,45 @@ public class AvailableFormatsRepository implements CrudRepository<AvailableForma
         template = jdbc;
     }
 
+    public List<AvailableFormats> findFormatsByWorkId(long workId) {
+        return template.query("SELECT * FROM FORMATS WHERE WORK_ID = ?", newAvailableFormatsMapper(), workId);
+    }
+
     @Override
     public AvailableFormats create(AvailableFormats format) {
-        return null;
+        int update = template.update(
+                "INSERT INTO FORMATS (WORK_ID, FORMAT, SHIPPING_COST) VALUES (?, ?, ?)",
+                format.getWorkId(), format.getWorkFormat().ordinal(), format.getShippingCost());
+        return (update == 0) ? null
+                : template.queryForObject(
+                        "SELECT * FROM FORMATS WHERE WORK_ID = ? AND FORMAT = ?",
+                        newAvailableFormatsMapper(),
+                        format.getWorkId(), format.getWorkFormat().ordinal());
     }
 
     @Override
     public List<AvailableFormats> findAll() {
-        return new ArrayList<>();
+        return template.query(
+                "SELECT * FROM FORMATS", newAvailableFormatsMapper());
     }
 
     @Override
     public AvailableFormats findById(long id) {
-        return null;
+        return template.queryForObject(
+                "SELECT * FROM FORMATS WHERE ID = ?", newAvailableFormatsMapper(), id);
     }
 
     @Override
     public AvailableFormats update(AvailableFormats format) {
-        return null;
+        int update = template.update(
+                "UPDATE FORMATS SET WORK_ID = ?, FORMAT = ?, SHIPPING_COST = ? WHERE ID = ?",
+                format.getWorkId(), format.getWorkFormat().ordinal(), format.getShippingCost(), format.getId());
+        return (update == 0) ? null : format;
+
     }
 
     @Override
     public void delete(AvailableFormats format) {
-
+        template.update("DELETE FROM FORMATS WHERE ID = ?", format.getId());
     }
 }

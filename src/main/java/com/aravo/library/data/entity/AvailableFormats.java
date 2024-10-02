@@ -12,26 +12,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-//@Entity
-//@Table(name = "FORMATS")
 public class AvailableFormats implements Serializable, Persistable {
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
-
-//    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-//    @JoinColumn(name = "work_id", nullable = true)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonIgnore
-//    private Work work;
-//    @Column(name = "work_id")
-//    private long workId;
-
-//    @Column(name="format", nullable=true)
-//    @Enumerated(EnumType.STRING)
+    private long workId;
     private WorkFormat workFormat;
-
-//    @Column(name="shipping_cost", scale = 2)
     private BigDecimal shippingCost;
 
     public AvailableFormats(WorkFormat format) {
