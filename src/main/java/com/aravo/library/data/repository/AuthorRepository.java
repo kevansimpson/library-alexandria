@@ -1,11 +1,14 @@
 package com.aravo.library.data.repository;
 
 import com.aravo.library.data.entity.Author;
+import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newAuthorMapper;
 
@@ -61,4 +64,22 @@ public class AuthorRepository implements CrudRepository<Author>{
     public void delete(Author author) {
         template.update("DELETE FROM AUTHORS WHERE ID = ?", author.getId());
     }
+
+    protected void syncAuthors(Work work) {
+        Set<Author> authors = work.getAuthors().stream()
+                .map(this::save).collect(Collectors.toSet());
+        authors.forEach(a -> linkAuthorWork(work.getId(), a.getId()));
+        work.setAuthors(authors);
+    }
+
+    protected void linkAuthorWork(long workId, long authorId) {
+        Integer exists = template.queryForObject(
+                "SELECT count(*) FROM AUTHOR_WORK_XREF WHERE work_id = ? AND author_id = ?",
+                Integer.class, workId, authorId);
+        if (exists == null || exists == 0)
+            template.update(
+                    "INSERT INTO AUTHOR_WORK_XREF (work_id, author_id) VALUES (?, ?)",
+                    workId, authorId);
+    }
+
 }

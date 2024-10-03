@@ -1,11 +1,14 @@
 package com.aravo.library.data.repository;
 
 import com.aravo.library.data.entity.AvailableFormats;
+import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newAvailableFormatsMapper;
 
@@ -59,5 +62,16 @@ public class AvailableFormatsRepository implements CrudRepository<AvailableForma
     @Override
     public void delete(AvailableFormats format) {
         template.update("DELETE FROM FORMATS WHERE ID = ?", format.getId());
+    }
+
+
+    protected void syncAvailableFormats(Work work) {
+        Set<AvailableFormats> formats = work.getFormats().stream()
+                .map(f -> {
+                    f.setWorkId(work.getId());
+                    return save(f);
+                })
+                .collect(Collectors.toSet());
+        work.setFormats(formats);
     }
 }

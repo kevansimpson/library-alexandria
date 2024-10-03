@@ -3,6 +3,7 @@ package com.aravo.library.data.repository;
 import com.aravo.library.data.WorkFormat;
 import com.aravo.library.data.entity.Author;
 import com.aravo.library.data.entity.AvailableFormats;
+import com.aravo.library.data.entity.VolumeInfo;
 import com.aravo.library.data.entity.Work;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -16,6 +17,10 @@ public class EntityRowMappers {
 
     public static AvailableFormatsMapper newAvailableFormatsMapper() {
         return new AvailableFormatsMapper();
+    }
+
+    public static VolumeInfoMapper newVolumeInfoMapper() {
+        return new VolumeInfoMapper();
     }
 
     public static WorkMapper newWorkMapper() {
@@ -51,6 +56,17 @@ public class EntityRowMappers {
                     rs.getString("TITLE"),
                     rs.getDate("PUBLISHED"),
                     rs.getBoolean("RARE"));
+        }
+    }
+
+    private static class VolumeInfoMapper implements RowMapper<VolumeInfo> {
+        @Override
+        public VolumeInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new VolumeInfo(
+                    rs.getInt("ID"),
+                    rs.getInt("WORK_ID"),
+                    rs.getInt("VOLUME_NUMBER"),
+                    rs.getString("SERIES_TITLE"));
         }
     }
 }

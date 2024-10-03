@@ -20,6 +20,7 @@ public class Work implements Serializable, Persistable {
     private boolean rare;
     private Set<Author> authors = new HashSet<>();
     private Set<AvailableFormats> formats = new HashSet<>();
+    private VolumeInfo volumeInfo;
 
     public Work(String title, Date publishedOn, boolean isRare) {
         setTitle(title);
@@ -45,6 +46,7 @@ public class Work implements Serializable, Persistable {
 
     public void addFormat(AvailableFormats format) {
         formats.add(format);
+        format.setWorkId(getId());
     }
 
     public void removeFormat(long formatId) {
@@ -52,5 +54,11 @@ public class Work implements Serializable, Persistable {
         if (format != null) {
             formats.remove(format);
         }
+    }
+
+    public void setVolumeInfo(VolumeInfo info) {
+        volumeInfo = info;
+        if (volumeInfo != null)
+            volumeInfo.setWorkId(getId());
     }
 }
