@@ -28,7 +28,7 @@ public class LibraryConfiguration {
             Work dhw = workRepository.create(
                     new Work("Demon Haunted World", Date.valueOf("1995-01-01"), true));
             dhw.addAuthor(cSagan);
-            dhw.addFormat(new AvailableFormats(WorkFormat.TABLET));
+            dhw.addFormat(new AvailableFormat(WorkFormat.TABLET));
             workRepository.save(dhw);
 
             List<Work> deathGateCycle = Stream.of(
@@ -45,7 +45,7 @@ public class LibraryConfiguration {
             deathGateCycle.forEach(work -> {
                 work.addAuthor(mWeis);
                 work.addAuthor(tHickman);
-                work.addFormat(new AvailableFormats(WorkFormat.SCROLL, BigDecimal.valueOf(5.99)));
+                work.addFormat(new AvailableFormat(WorkFormat.SCROLL, BigDecimal.valueOf(5.99)));
                 work.setVolumeInfo(new VolumeInfo(volume[0]++, "The Death Gate Cycle"));
             });
             deathGateCycle.get(6).addCitation(new Citation(
@@ -57,8 +57,8 @@ public class LibraryConfiguration {
                     "Patterns of Enterprise Application Architecture",
                     Date.valueOf("2002-10-01"), false));
             patternsEAA.addAuthor(mFowler);
-            patternsEAA.addFormat(new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99)));
-            patternsEAA.addFormat(new AvailableFormats(WorkFormat.TABLET, BigDecimal.valueOf(14.99)));
+            patternsEAA.addFormat(new AvailableFormat(WorkFormat.CODEX, BigDecimal.valueOf(24.99)));
+            patternsEAA.addFormat(new AvailableFormat(WorkFormat.TABLET, BigDecimal.valueOf(14.99)));
             patternsEAA.setForward(new Forward("Kevan Simpson", "This is a very good book!"));
             workRepository.save(patternsEAA);
         };

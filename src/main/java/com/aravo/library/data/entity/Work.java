@@ -24,7 +24,7 @@ public class Work implements Serializable, Persistable {
     private boolean rare;
     private Set<Author> authors = new HashSet<>();
     private Set<Citation> citations = new HashSet<>();
-    private Set<AvailableFormats> formats = new HashSet<>();
+    private Set<AvailableFormat> formats = new HashSet<>();
     private Forward forward;
     private VolumeInfo volumeInfo;
 
@@ -62,13 +62,13 @@ public class Work implements Serializable, Persistable {
         }
     }
 
-    public void addFormat(AvailableFormats format) {
+    public void addFormat(AvailableFormat format) {
         formats.add(format);
         format.setWorkId(getId());
     }
 
     public void removeFormat(long formatId) {
-        AvailableFormats format = formats.stream().filter(a -> a.getId() == formatId).findFirst().orElse(null);
+        AvailableFormat format = formats.stream().filter(a -> a.getId() == formatId).findFirst().orElse(null);
         if (format != null) {
             formats.remove(format);
         }

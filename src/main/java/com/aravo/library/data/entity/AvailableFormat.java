@@ -16,17 +16,17 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.*;
 @NoArgsConstructor
 @Data
 @JsonInclude(NON_NULL)
-public class AvailableFormats implements Serializable, Persistable {
+public class AvailableFormat implements Serializable, Persistable {
     private long id;
     private long workId;
     private WorkFormat workFormat;
     private BigDecimal shippingCost;
 
-    public AvailableFormats(WorkFormat format) {
+    public AvailableFormat(WorkFormat format) {
         this(format, null);
     }
 
-    public AvailableFormats(WorkFormat format, BigDecimal shippingCost) {
+    public AvailableFormat(WorkFormat format, BigDecimal shippingCost) {
         setWorkFormat(format);
         setShippingCost(shippingCost);
     }

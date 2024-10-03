@@ -15,7 +15,7 @@ import static com.aravo.library.data.repository.EntityRowMappers.newWorkMapper;
 public class WorkRepository implements CrudRepository<Work> {
     private final JdbcTemplate template;
     private final AuthorRepository authorRepository;
-    private final AvailableFormatsRepository formatsRepository;
+    private final AvailableFormatRepository formatsRepository;
     private final CitationRepository citationRepository;
     private final ForwardRepository forwardRepository;
     private final VolumeRepository volumeRepository;
@@ -24,7 +24,7 @@ public class WorkRepository implements CrudRepository<Work> {
     public WorkRepository(
             JdbcTemplate jdbc,
             AuthorRepository authors,
-            AvailableFormatsRepository formats,
+            AvailableFormatRepository formats,
             CitationRepository citations,
             ForwardRepository forwards,
             VolumeRepository volumes) {

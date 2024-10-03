@@ -12,8 +12,8 @@ public class EntityRowMappers {
         return new AuthorMapper();
     }
 
-    public static AvailableFormatsMapper newAvailableFormatsMapper() {
-        return new AvailableFormatsMapper();
+    public static AvailableFormatMapper newAvailableFormatMapper() {
+        return new AvailableFormatMapper();
     }
 
     public static CitationMapper newCitationMapper() {
@@ -42,10 +42,10 @@ public class EntityRowMappers {
         }
     }
 
-    private static class AvailableFormatsMapper implements RowMapper<AvailableFormats> {
+    private static class AvailableFormatMapper implements RowMapper<AvailableFormat> {
         @Override
-        public AvailableFormats mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new AvailableFormats(
+        public AvailableFormat mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new AvailableFormat(
                     rs.getInt("ID"),
                     rs.getInt("WORK_ID"),
                     WorkFormat.values()[rs.getInt("FORMAT")],

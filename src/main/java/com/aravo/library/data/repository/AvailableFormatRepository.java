@@ -1,6 +1,6 @@
 package com.aravo.library.data.repository;
 
-import com.aravo.library.data.entity.AvailableFormats;
+import com.aravo.library.data.entity.AvailableFormat;
 import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,48 +10,48 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.aravo.library.data.repository.EntityRowMappers.newAvailableFormatsMapper;
+import static com.aravo.library.data.repository.EntityRowMappers.newAvailableFormatMapper;
 
 @Component
-public class AvailableFormatsRepository implements CrudRepository<AvailableFormats> {
+public class AvailableFormatRepository implements CrudRepository<AvailableFormat> {
 
     private final JdbcTemplate template;
 
     @Autowired
-    public AvailableFormatsRepository(JdbcTemplate jdbc) {
+    public AvailableFormatRepository(JdbcTemplate jdbc) {
         template = jdbc;
     }
 
-    public List<AvailableFormats> findFormatsByWorkId(long workId) {
-        return template.query("SELECT * FROM FORMATS WHERE WORK_ID = ?", newAvailableFormatsMapper(), workId);
+    public List<AvailableFormat> findFormatsByWorkId(long workId) {
+        return template.query("SELECT * FROM FORMATS WHERE WORK_ID = ?", newAvailableFormatMapper(), workId);
     }
 
     @Override
-    public AvailableFormats create(AvailableFormats format) {
+    public AvailableFormat create(AvailableFormat format) {
         int update = template.update(
                 "INSERT INTO FORMATS (WORK_ID, FORMAT, SHIPPING_COST) VALUES (?, ?, ?)",
                 format.getWorkId(), format.getWorkFormat().ordinal(), format.getShippingCost());
         return (update == 0) ? null
                 : template.queryForObject(
                         "SELECT * FROM FORMATS WHERE WORK_ID = ? AND FORMAT = ?",
-                        newAvailableFormatsMapper(),
+                        newAvailableFormatMapper(),
                         format.getWorkId(), format.getWorkFormat().ordinal());
     }
 
     @Override
-    public List<AvailableFormats> findAll() {
+    public List<AvailableFormat> findAll() {
         return template.query(
-                "SELECT * FROM FORMATS", newAvailableFormatsMapper());
+                "SELECT * FROM FORMATS", newAvailableFormatMapper());
     }
 
     @Override
-    public AvailableFormats findById(long id) {
+    public AvailableFormat findById(long id) {
         return template.queryForObject(
-                "SELECT * FROM FORMATS WHERE ID = ?", newAvailableFormatsMapper(), id);
+                "SELECT * FROM FORMATS WHERE ID = ?", newAvailableFormatMapper(), id);
     }
 
     @Override
-    public AvailableFormats update(AvailableFormats format) {
+    public AvailableFormat update(AvailableFormat format) {
         int update = template.update(
                 "UPDATE FORMATS SET WORK_ID = ?, FORMAT = ?, SHIPPING_COST = ? WHERE ID = ?",
                 format.getWorkId(), format.getWorkFormat().ordinal(), format.getShippingCost(), format.getId());
@@ -60,13 +60,13 @@ public class AvailableFormatsRepository implements CrudRepository<AvailableForma
     }
 
     @Override
-    public void delete(AvailableFormats format) {
+    public void delete(AvailableFormat format) {
         template.update("DELETE FROM FORMATS WHERE ID = ?", format.getId());
     }
 
 
     protected void syncAvailableFormats(Work work) {
-        Set<AvailableFormats> formats = work.getFormats().stream()
+        Set<AvailableFormat> formats = work.getFormats().stream()
                 .map(f -> {
                     f.setWorkId(work.getId());
                     return save(f);
