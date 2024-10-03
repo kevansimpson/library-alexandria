@@ -1,10 +1,7 @@
 package com.aravo.library.data.repository;
 
 import com.aravo.library.data.WorkFormat;
-import com.aravo.library.data.entity.Author;
-import com.aravo.library.data.entity.AvailableFormats;
-import com.aravo.library.data.entity.VolumeInfo;
-import com.aravo.library.data.entity.Work;
+import com.aravo.library.data.entity.*;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -17,6 +14,10 @@ public class EntityRowMappers {
 
     public static AvailableFormatsMapper newAvailableFormatsMapper() {
         return new AvailableFormatsMapper();
+    }
+
+    public static ForwardMapper newForwardMapper() {
+        return new ForwardMapper();
     }
 
     public static VolumeInfoMapper newVolumeInfoMapper() {
@@ -45,6 +46,17 @@ public class EntityRowMappers {
                     rs.getInt("WORK_ID"),
                     WorkFormat.values()[rs.getInt("FORMAT")],
                     rs.getBigDecimal("SHIPPING_COST"));
+        }
+    }
+
+    private static class ForwardMapper implements RowMapper<Forward> {
+        @Override
+        public Forward mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Forward(
+                    rs.getInt("ID"),
+                    rs.getInt("WORK_ID"),
+                    rs.getString("AUTHOR"),
+                    rs.getString("FORWARD"));
         }
     }
 

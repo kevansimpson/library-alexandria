@@ -1,7 +1,5 @@
 package com.aravo.library.data.repository;
 
-import com.aravo.library.data.entity.Author;
-import com.aravo.library.data.entity.AvailableFormats;
 import com.aravo.library.data.entity.Work;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newWorkMapper;
@@ -19,6 +16,7 @@ public class WorkRepository implements CrudRepository<Work> {
     private final JdbcTemplate template;
     private final AuthorRepository authorRepository;
     private final AvailableFormatsRepository formatsRepository;
+    private final ForwardRepository forwardRepository;
     private final VolumeRepository volumeRepository;
 
     @Autowired
@@ -26,10 +24,12 @@ public class WorkRepository implements CrudRepository<Work> {
             JdbcTemplate jdbc,
             AuthorRepository authors,
             AvailableFormatsRepository formats,
+            ForwardRepository forwards,
             VolumeRepository volumes) {
         template = jdbc;
         authorRepository = authors;
         formatsRepository = formats;
+        forwardRepository = forwards;
         volumeRepository = volumes;
     }
 
@@ -38,6 +38,7 @@ public class WorkRepository implements CrudRepository<Work> {
         Work work = CrudRepository.super.save(entity);
         authorRepository.syncAuthors(work);
         formatsRepository.syncAvailableFormats(work);
+        forwardRepository.syncForward(work);
         volumeRepository.syncVolumeInfo(work);
         return work;
     }
@@ -85,6 +86,7 @@ public class WorkRepository implements CrudRepository<Work> {
         if (work != null) {
             authorRepository.findAuthorsByWorkId(work.getId()).forEach(work::addAuthor);
             formatsRepository.findFormatsByWorkId(work.getId()).forEach(work::addFormat);
+            work.setForward(forwardRepository.findForwardByWorkId(work.getId()));
             work.setVolumeInfo(volumeRepository.findVolumeInfoByWorkId(work.getId()));
         }
         return work;

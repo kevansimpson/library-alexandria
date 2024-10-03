@@ -1,12 +1,8 @@
 package com.aravo.library.config;
 
 import com.aravo.library.data.WorkFormat;
-import com.aravo.library.data.entity.Author;
-import com.aravo.library.data.entity.AvailableFormats;
-import com.aravo.library.data.entity.VolumeInfo;
-import com.aravo.library.data.entity.Work;
+import com.aravo.library.data.entity.*;
 import com.aravo.library.data.repository.AuthorRepository;
-import com.aravo.library.data.repository.AvailableFormatsRepository;
 import com.aravo.library.data.repository.WorkRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +18,6 @@ public class LibraryConfiguration {
     @Bean
     public CommandLineRunner loadSeedData(
             AuthorRepository authorRepository,
-            AvailableFormatsRepository formatsRepository,
             WorkRepository workRepository) {
         return (args) -> {
             Author mWeis = authorRepository.create(new Author("Margaret", "Weis"));
@@ -60,6 +55,8 @@ public class LibraryConfiguration {
                     Date.valueOf("2002-10-01"), false));
             patternsEAA.addAuthor(mFowler);
             patternsEAA.addFormat(new AvailableFormats(WorkFormat.CODEX, BigDecimal.valueOf(24.99)));
+            patternsEAA.addFormat(new AvailableFormats(WorkFormat.TABLET, BigDecimal.valueOf(14.99)));
+            patternsEAA.setForward(new Forward("Kevan Simpson", "This is a very good book!"));
             workRepository.save(patternsEAA);
         };
     }

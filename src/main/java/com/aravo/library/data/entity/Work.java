@@ -1,6 +1,7 @@
 package com.aravo.library.data.entity;
 
 import com.aravo.library.data.Persistable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.*;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonInclude(NON_NULL)
 public class Work implements Serializable, Persistable {
     private long id;
     private String title;
@@ -21,6 +25,7 @@ public class Work implements Serializable, Persistable {
     private Set<Author> authors = new HashSet<>();
     private Set<AvailableFormats> formats = new HashSet<>();
     private VolumeInfo volumeInfo;
+    private Forward forward;
 
     public Work(String title, Date publishedOn, boolean isRare) {
         setTitle(title);
@@ -54,6 +59,12 @@ public class Work implements Serializable, Persistable {
         if (format != null) {
             formats.remove(format);
         }
+    }
+
+    public void setForward(Forward newForward) {
+        forward = newForward;
+        if (forward != null)
+            forward.setWorkId(getId());
     }
 
     public void setVolumeInfo(VolumeInfo info) {
