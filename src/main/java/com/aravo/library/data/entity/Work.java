@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,9 +23,10 @@ public class Work implements Serializable, Persistable {
     private Date published;
     private boolean rare;
     private Set<Author> authors = new HashSet<>();
+    private Set<Citation> citations = new HashSet<>();
     private Set<AvailableFormats> formats = new HashSet<>();
-    private VolumeInfo volumeInfo;
     private Forward forward;
+    private VolumeInfo volumeInfo;
 
     public Work(String title, Date publishedOn, boolean isRare) {
         setTitle(title);
@@ -46,6 +47,18 @@ public class Work implements Serializable, Persistable {
         Author author = authors.stream().filter(a -> a.getId() == authorId).findFirst().orElse(null);
         if (author != null) {
             authors.remove(author);
+        }
+    }
+
+    public void addCitation(Citation citation) {
+        citations.add(citation);
+        citation.setWorkId(getId());
+    }
+
+    public void removeCitation(long citationId) {
+        Citation citation = citations.stream().filter(a -> a.getId() == citationId).findFirst().orElse(null);
+        if (citation != null) {
+            citations.remove(citation);
         }
     }
 

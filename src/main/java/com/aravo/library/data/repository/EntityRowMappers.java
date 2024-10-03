@@ -16,6 +16,10 @@ public class EntityRowMappers {
         return new AvailableFormatsMapper();
     }
 
+    public static CitationMapper newCitationMapper() {
+        return new CitationMapper();
+    }
+
     public static ForwardMapper newForwardMapper() {
         return new ForwardMapper();
     }
@@ -46,6 +50,19 @@ public class EntityRowMappers {
                     rs.getInt("WORK_ID"),
                     WorkFormat.values()[rs.getInt("FORMAT")],
                     rs.getBigDecimal("SHIPPING_COST"));
+        }
+    }
+
+    private static class CitationMapper implements RowMapper<Citation> {
+        @Override
+        public Citation mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Citation(
+                    rs.getInt("ID"),
+                    rs.getInt("WORK_ID"),
+                    rs.getInt("PAGE_NUMBER"),
+                    rs.getString("CITED_WORK"),
+                    rs.getString("CITATION_AUTHOR"),
+                    rs.getDate("CITED_WHEN"));
         }
     }
 

@@ -47,8 +47,11 @@ public class LibraryConfiguration {
                 work.addAuthor(tHickman);
                 work.addFormat(new AvailableFormats(WorkFormat.SCROLL, BigDecimal.valueOf(5.99)));
                 work.setVolumeInfo(new VolumeInfo(volume[0]++, "The Death Gate Cycle"));
-                workRepository.save(work);
             });
+            deathGateCycle.get(6).addCitation(new Citation(
+                    341, "Fire Sea, vol. 3 of The Death Gate Cycle",
+                    "M. Weis", Date.valueOf("1994-08-31")));
+            deathGateCycle.forEach(workRepository::save);
 
             Work patternsEAA = workRepository.create(new Work(
                     "Patterns of Enterprise Application Architecture",

@@ -16,6 +16,7 @@ public class WorkRepository implements CrudRepository<Work> {
     private final JdbcTemplate template;
     private final AuthorRepository authorRepository;
     private final AvailableFormatsRepository formatsRepository;
+    private final CitationRepository citationRepository;
     private final ForwardRepository forwardRepository;
     private final VolumeRepository volumeRepository;
 
@@ -24,10 +25,12 @@ public class WorkRepository implements CrudRepository<Work> {
             JdbcTemplate jdbc,
             AuthorRepository authors,
             AvailableFormatsRepository formats,
+            CitationRepository citations,
             ForwardRepository forwards,
             VolumeRepository volumes) {
         template = jdbc;
         authorRepository = authors;
+        citationRepository = citations;
         formatsRepository = formats;
         forwardRepository = forwards;
         volumeRepository = volumes;
@@ -37,6 +40,7 @@ public class WorkRepository implements CrudRepository<Work> {
     public Work save(Work entity) {
         Work work = CrudRepository.super.save(entity);
         authorRepository.syncAuthors(work);
+        citationRepository.syncCitation(work);
         formatsRepository.syncAvailableFormats(work);
         forwardRepository.syncForward(work);
         volumeRepository.syncVolumeInfo(work);
@@ -85,6 +89,7 @@ public class WorkRepository implements CrudRepository<Work> {
     protected Work load(Work work) {
         if (work != null) {
             authorRepository.findAuthorsByWorkId(work.getId()).forEach(work::addAuthor);
+            citationRepository.findCitationsByWorkId(work.getId()).forEach(work::addCitation);
             formatsRepository.findFormatsByWorkId(work.getId()).forEach(work::addFormat);
             work.setForward(forwardRepository.findForwardByWorkId(work.getId()));
             work.setVolumeInfo(volumeRepository.findVolumeInfoByWorkId(work.getId()));
