@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "9e5e51bd-addb-47f6-aa86-41e08c454034",
+		"name": "Works",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10811274"
+	},
+	"item": [
+		{
+			"name": "Fetch Works",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/work",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"work"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Work By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/work/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"work",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Work",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"title\": \"Made Up Book\",\n        \"published\": \"2024-10-01\",\n        \"rare\": true,\n        \"authors\": [\n            {\n                \"firstName\": \"Kevan\",\n                \"lastName\": \"Simpson\"\n            }\n        ]\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/work",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"work"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Work",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/work/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"work",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Work",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 10,\n    \"title\": \"Made Up Book\",\n    \"published\": \"2024-10-01\",\n    \"rare\": true,\n    \"authors\": [\n        {\n            \"id\": 5,\n            \"firstName\": \"KevanUpdated\",\n            \"lastName\": \"Simpson\"\n        }\n    ],\n    \"citations\": [],\n    \"formats\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/work",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"work"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
