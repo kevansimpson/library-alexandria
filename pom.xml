@@ -35,6 +35,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.34</version>
         </dependency>
+        <!-- For LocalDate to be deserialized using ISO format -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
 
         <!-- test dependencies -->
         <dependency>

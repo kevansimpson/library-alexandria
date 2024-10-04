@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 public class Work implements Serializable, Persistable {
     private long id;
     private String title;
-    private Date published;
+    private LocalDate published;
     private boolean rare;
     private Set<Author> authors = new HashSet<>();
     private Set<Citation> citations = new HashSet<>();
@@ -28,13 +29,13 @@ public class Work implements Serializable, Persistable {
     private Forward forward;
     private VolumeInfo volumeInfo;
 
-    public Work(String title, Date publishedOn, boolean isRare) {
+    public Work(String title, LocalDate publishedOn, boolean isRare) {
         setTitle(title);
         setPublished(publishedOn);
         setRare(isRare);
     }
 
-    public Work(long id, String title, Date publishedOn, boolean isRare) {
+    public Work(long id, String title, LocalDate publishedOn, boolean isRare) {
         this(title, publishedOn, isRare);
         setId(id);
     }

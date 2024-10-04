@@ -25,6 +25,15 @@ public class WorkController {
         return new ResponseEntity<>(workService.createWork(work), HttpStatus.CREATED);
     }
 
+    @GetMapping(path = "/{id}", produces = "application/json")
+    public ResponseEntity<Work> findWork(@PathVariable long id) {
+        Work work = workService.findWorkById(id);
+        if (work == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else
+            return new ResponseEntity<>(work, HttpStatus.OK);
+    }
+
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Work>> getWorks() {
         return new ResponseEntity<>(workService.fetchWorks(), HttpStatus.OK);
@@ -35,8 +44,12 @@ public class WorkController {
         return new ResponseEntity<>(workService.updateWork(work), HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Work> deleteWork(@RequestBody Work work) {
-        return new ResponseEntity<>(workService.deleteWork(work), HttpStatus.NO_CONTENT);
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Work> deleteWork(@PathVariable long id) {
+        Work toBeDeleted = workService.deleteWork(id);
+        if (toBeDeleted == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else
+            return new ResponseEntity<>(toBeDeleted, HttpStatus.BAD_REQUEST);
     }
 }

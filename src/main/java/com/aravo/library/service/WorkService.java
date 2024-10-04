@@ -9,5 +9,5 @@ public interface WorkService {
     List<Work> fetchWorks();
     Work findWorkById(long id);
     Work updateWork(Work work);
-    Work deleteWork(Work work);
+    Work deleteWork(long id);
 }

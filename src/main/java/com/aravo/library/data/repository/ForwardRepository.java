@@ -5,8 +5,12 @@ import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newForwardMapper;
@@ -33,12 +37,18 @@ public class ForwardRepository implements CrudRepository<Forward>{
 
     @Override
     public Forward create(Forward forward) {
-        int update = template.update(
-                "INSERT INTO FORWARDS (WORK_ID, AUTHOR, FORWARD) VALUES (?, ?, ?)",
-                forward.getWorkId(), forward.getAuthor(), forward.getForwardText());
-        return (update == 0) ? null
-                : template.queryForObject("SELECT * FROM FORWARDS WHERE WORK_ID = ? AND AUTHOR = ?",
-                newForwardMapper(), forward.getWorkId(), forward.getAuthor());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        template.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO FORWARDS (WORK_ID, AUTHOR, FORWARD) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stmt.setLong(1, forward.getWorkId());
+            stmt.setString(2, forward.getAuthor());
+            stmt.setString(3, forward.getForwardText());
+            return stmt;
+        }, keyHolder);
+        //noinspection DataFlowIssue
+        return findById(keyHolder.getKeyAs(Long.class));
     }
 
     @Override
@@ -67,8 +77,8 @@ public class ForwardRepository implements CrudRepository<Forward>{
     }
 
     @Override
-    public void delete(Forward forward) {
-        template.update("DELETE FROM FORWARDS WHERE ID = ?", forward.getId());
+    public void delete(long id) {
+        template.update("DELETE FROM FORWARDS WHERE ID = ?", id);
     }
 
     protected void syncForward(Work work) {

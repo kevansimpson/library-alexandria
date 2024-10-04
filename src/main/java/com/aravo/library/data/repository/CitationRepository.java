@@ -4,8 +4,13 @@ import com.aravo.library.data.entity.Citation;
 import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,15 +33,20 @@ public class CitationRepository implements CrudRepository<Citation> {
 
     @Override
     public Citation create(Citation citation) {
-        int update = template.update(
-                "INSERT INTO CITATIONS (WORK_ID, PAGE_NUMBER, CITED_WORK, CITATION_AUTHOR, CITED_WHEN) VALUES (?, ?, ?, ?, ?)",
-                citation.getWorkId(), citation.getPageNumber(),
-                citation.getCitedWork(), citation.getCitationAuthor(), citation.getCitedOn());
-        return (update == 0) ? null
-                : template.queryForObject(
-                        "SELECT * FROM CITATIONS WHERE WORK_ID = ? AND PAGE_NUMBER = ? AND CITED_WORK = ?",
-                        newCitationMapper(),
-                        citation.getWorkId(), citation.getPageNumber(), citation.getCitedWork());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        template.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO CITATIONS (WORK_ID, PAGE_NUMBER, CITED_WORK, CITATION_AUTHOR, CITED_WHEN) VALUES (?, ?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stmt.setLong(1, citation.getWorkId());
+            stmt.setInt(2, citation.getPageNumber());
+            stmt.setString(3, citation.getCitedWork());
+            stmt.setString(4, citation.getCitationAuthor());
+            stmt.setDate(5, Date.valueOf(citation.getCitedOn()));
+            return stmt;
+        }, keyHolder);
+        //noinspection DataFlowIssue
+        return findById(keyHolder.getKeyAs(Long.class));
     }
 
     @Override
@@ -60,11 +70,11 @@ public class CitationRepository implements CrudRepository<Citation> {
     }
 
     @Override
-    public void delete(Citation citation) {
-        template.update("DELETE FROM CITATIONS WHERE ID = ?", citation.getId());
+    public void delete(long id) {
+        template.update("DELETE FROM CITATIONS WHERE ID = ?", id);
     }
 
-    protected void syncCitation(Work work) {
+    protected void syncCitations(Work work) {
         Set<Citation> citations = work.getCitations().stream()
                 .map(c -> {
                     c.setWorkId(work.getId());

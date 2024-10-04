@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -26,19 +27,19 @@ public class LibraryConfiguration {
             Author mFowler = authorRepository.create(new Author("Martin", "Fowler"));
 
             Work dhw = workRepository.create(
-                    new Work("Demon Haunted World", Date.valueOf("1995-01-01"), true));
+                    new Work("Demon Haunted World", LocalDate.of(1995, 1, 1), true));
             dhw.addAuthor(cSagan);
             dhw.addFormat(new AvailableFormat(WorkFormat.TABLET));
             workRepository.save(dhw);
 
             List<Work> deathGateCycle = Stream.of(
-                    new Work("Dragon Wing", Date.valueOf("1990-02-01"), false),
-                    new Work("Elven Star", Date.valueOf("1990-11-01"), false),
-                    new Work("Fire Sea", Date.valueOf("1991-08-01"), false),
-                    new Work("Serpent Mage", Date.valueOf("1992-04-01"), false),
-                    new Work("The Hand of Chaos", Date.valueOf("1993-04-01"), false),
-                    new Work("Into The Labyrinth", Date.valueOf("1993-12-01"), false),
-                    new Work("The Seventh Gate", Date.valueOf("1994-09-01"), false)
+                    new Work("Dragon Wing", LocalDate.of(1990, 2, 1), false),
+                    new Work("Elven Star", LocalDate.of(1990, 11, 1), false),
+                    new Work("Fire Sea", LocalDate.of(1991, 8, 1), false),
+                    new Work("Serpent Mage", LocalDate.of(1992, 4, 1), false),
+                    new Work("The Hand of Chaos", LocalDate.of(1993, 4, 1), false),
+                    new Work("Into The Labyrinth", LocalDate.of(1993, 12, 1), false),
+                    new Work("The Seventh Gate", LocalDate.of(1994, 9, 1), false)
             ).map(workRepository::create).toList();
 
             int[] volume = { 1 };
@@ -50,12 +51,12 @@ public class LibraryConfiguration {
             });
             deathGateCycle.get(6).addCitation(new Citation(
                     341, "Fire Sea, vol. 3 of The Death Gate Cycle",
-                    "M. Weis", Date.valueOf("1994-08-31")));
+                    "M. Weis", LocalDate.of(1994, 8, 31)));
             deathGateCycle.forEach(workRepository::save);
 
             Work patternsEAA = workRepository.create(new Work(
                     "Patterns of Enterprise Application Architecture",
-                    Date.valueOf("2002-10-01"), false));
+                    LocalDate.of(2002, 10, 1), false));
             patternsEAA.addAuthor(mFowler);
             patternsEAA.addFormat(new AvailableFormat(WorkFormat.CODEX, BigDecimal.valueOf(24.99)));
             patternsEAA.addFormat(new AvailableFormat(WorkFormat.TABLET, BigDecimal.valueOf(14.99)));

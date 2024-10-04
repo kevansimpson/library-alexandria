@@ -32,9 +32,9 @@ public class AuthorServiceImpl implements AuthorService {
         return authorRepository.update(author);
     }
 
-    public Author deleteAuthor(Author author) {
+    public Author deleteAuthor(long id) {
         // TODO check for existing works
-        authorRepository.delete(author);
-        return findAuthorById(author.getId());
+        authorRepository.delete(id);
+        return findAuthorById(id);
     }
 }

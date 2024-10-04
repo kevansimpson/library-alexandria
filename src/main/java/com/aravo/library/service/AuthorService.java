@@ -9,5 +9,5 @@ public interface AuthorService {
     List<Author> fetchAuthors();
     Author findAuthorById(long id);
     Author updateAuthor(Author author);
-    Author deleteAuthor(Author author);
+    Author deleteAuthor(long id);
 }

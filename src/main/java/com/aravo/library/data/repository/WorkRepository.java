@@ -3,9 +3,15 @@ package com.aravo.library.data.repository;
 import com.aravo.library.data.entity.Work;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +46,7 @@ public class WorkRepository implements CrudRepository<Work> {
     public Work save(Work entity) {
         Work work = CrudRepository.super.save(entity);
         authorRepository.syncAuthors(work);
-        citationRepository.syncCitation(work);
+        citationRepository.syncCitations(work);
         formatsRepository.syncAvailableFormats(work);
         forwardRepository.syncForward(work);
         volumeRepository.syncVolumeInfo(work);
@@ -49,15 +55,18 @@ public class WorkRepository implements CrudRepository<Work> {
 
     @Override
     public Work create(Work work) {
-        int update = template.update(
-                "INSERT INTO WORKS (TITLE, PUBLISHED, RARE) VALUES (?, ?, ?)",
-                work.getTitle(), work.getPublished(), work.isRare());
-        Integer created = (update == 0) ? null
-                : template.queryForObject("SELECT ID FROM WORKS WHERE TITLE = ? AND PUBLISHED = ?",
-                Integer.class, work.getTitle(), work.getPublished());
-        if (created != null)
-            work.setId(created);
-        return work;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        template.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO WORKS (TITLE, PUBLISHED, RARE) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, work.getTitle());
+            stmt.setDate(2, Date.valueOf(work.getPublished()));
+            stmt.setBoolean(3, work.isRare());
+            return stmt;
+        }, keyHolder);
+        //noinspection DataFlowIssue
+        return findById(keyHolder.getKeyAs(Long.class));
     }
 
     @Override
@@ -69,8 +78,12 @@ public class WorkRepository implements CrudRepository<Work> {
 
     @Override
     public Work findById(long id) {
-        return load(template.queryForObject(
-                "SELECT * FROM WORKS WHERE ID = ?", newWorkMapper(), id));
+        try {
+            return load(template.queryForObject("SELECT * FROM WORKS WHERE ID = ?", newWorkMapper(), id));
+        }
+        catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -81,9 +94,10 @@ public class WorkRepository implements CrudRepository<Work> {
         return (update == 0) ? null : work;
     }
 
-    @Override
-    public void delete(Work work) {
-        template.update("DELETE FROM WORKS WHERE ID = ?", work.getId());
+    @Override @Transactional
+    public void delete(long id) {
+        // TODO cascading delete
+        template.update("DELETE FROM WORKS WHERE ID = ?", id);
     }
 
     protected Work load(Work work) {

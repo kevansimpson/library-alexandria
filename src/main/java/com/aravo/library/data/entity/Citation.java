@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
@@ -21,9 +22,9 @@ public class Citation implements Serializable, Persistable {
     private int pageNumber;
     private String citedWork;
     private String citationAuthor;
-    private Date citedOn;
+    private LocalDate citedOn;
 
-    public Citation(int page, String work, String author, Date when) {
+    public Citation(int page, String work, String author, LocalDate when) {
         setPageNumber(page);
         setCitedWork(work);
         setCitationAuthor(author);

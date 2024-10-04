@@ -25,6 +25,15 @@ public class AuthorController {
         return new ResponseEntity<>(authorService.createAuthor(author), HttpStatus.CREATED);
     }
 
+    @GetMapping(path = "/{id}", produces = "application/json")
+    public ResponseEntity<Author> findAuthor(@PathVariable long id) {
+        Author author = authorService.findAuthorById(id);
+        if (author == null)
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        else
+            return new ResponseEntity<>(author, HttpStatus.OK);
+    }
+
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Author>> getAuthors() {
         return new ResponseEntity<>(authorService.fetchAuthors(), HttpStatus.OK);
@@ -35,8 +44,12 @@ public class AuthorController {
         return new ResponseEntity<>(authorService.updateAuthor(author), HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Author> deleteAuthor(@RequestBody Author author) {
-        return new ResponseEntity<>(authorService.deleteAuthor(author), HttpStatus.NO_CONTENT);
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Author> deleteAuthor(@PathVariable long id) {
+        Author toBeDeleted = authorService.deleteAuthor(id);
+        if (toBeDeleted == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else
+            return new ResponseEntity<>(toBeDeleted, HttpStatus.BAD_REQUEST);
     }
 }

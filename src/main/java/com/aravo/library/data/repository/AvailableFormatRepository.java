@@ -4,8 +4,12 @@ import com.aravo.library.data.entity.AvailableFormat;
 import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,14 +32,18 @@ public class AvailableFormatRepository implements CrudRepository<AvailableFormat
 
     @Override
     public AvailableFormat create(AvailableFormat format) {
-        int update = template.update(
-                "INSERT INTO FORMATS (WORK_ID, FORMAT, SHIPPING_COST) VALUES (?, ?, ?)",
-                format.getWorkId(), format.getWorkFormat().ordinal(), format.getShippingCost());
-        return (update == 0) ? null
-                : template.queryForObject(
-                        "SELECT * FROM FORMATS WHERE WORK_ID = ? AND FORMAT = ?",
-                        newAvailableFormatMapper(),
-                        format.getWorkId(), format.getWorkFormat().ordinal());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        template.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO FORMATS (WORK_ID, FORMAT, SHIPPING_COST) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stmt.setLong(1, format.getWorkId());
+            stmt.setInt(2, format.getWorkFormat().ordinal());
+            stmt.setBigDecimal(3, format.getShippingCost());
+            return stmt;
+        }, keyHolder);
+        //noinspection DataFlowIssue
+        return findById(keyHolder.getKeyAs(Long.class));
     }
 
     @Override
@@ -60,8 +68,8 @@ public class AvailableFormatRepository implements CrudRepository<AvailableFormat
     }
 
     @Override
-    public void delete(AvailableFormat format) {
-        template.update("DELETE FROM FORMATS WHERE ID = ?", format.getId());
+    public void delete(long id) {
+        template.update("DELETE FROM FORMATS WHERE ID = ?", id);
     }
 
 

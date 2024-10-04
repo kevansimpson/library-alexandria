@@ -5,8 +5,12 @@ import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newVolumeInfoMapper;
@@ -33,12 +37,18 @@ public class VolumeRepository implements CrudRepository<VolumeInfo>{
 
     @Override
     public VolumeInfo create(VolumeInfo info) {
-        int update = template.update(
-                "INSERT INTO VOLUMES (WORK_ID, VOLUME_NUMBER, SERIES_TITLE) VALUES (?, ?, ?)",
-                info.getWorkId(), info.getVolume(), info.getSeriesTitle());
-        return (update == 0) ? null
-                : template.queryForObject("SELECT * FROM VOLUMES WHERE WORK_ID = ? AND VOLUME_NUMBER = ?",
-                newVolumeInfoMapper(), info.getWorkId(), info.getVolume());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        template.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO VOLUMES (WORK_ID, VOLUME_NUMBER, SERIES_TITLE) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stmt.setLong(1, info.getWorkId());
+            stmt.setInt(2, info.getVolume());
+            stmt.setString(3, info.getSeriesTitle());
+            return stmt;
+        }, keyHolder);
+        //noinspection DataFlowIssue
+        return findById(keyHolder.getKeyAs(Long.class));
     }
 
     @Override
@@ -67,8 +77,8 @@ public class VolumeRepository implements CrudRepository<VolumeInfo>{
     }
 
     @Override
-    public void delete(VolumeInfo info) {
-        template.update("DELETE FROM VOLUMES WHERE ID = ?", info.getId());
+    public void delete(long id) {
+        template.update("DELETE FROM VOLUMES WHERE ID = ?", id);
     }
 
     protected void syncVolumeInfo(Work work) {

@@ -3,9 +3,14 @@ package com.aravo.library.data.repository;
 import com.aravo.library.data.entity.Author;
 import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,12 +37,17 @@ public class AuthorRepository implements CrudRepository<Author>{
 
     @Override
     public Author create(Author author) {
-        int update = template.update(
-                "INSERT INTO AUTHORS (FIRST_NAME, LAST_NAME) VALUES (?, ?)",
-                author.getFirstName(), author.getLastName());
-        return (update == 0) ? null
-                : template.queryForObject("SELECT * FROM AUTHORS WHERE FIRST_NAME = ? AND LAST_NAME = ?",
-                newAuthorMapper(), author.getFirstName(), author.getLastName());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        template.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO AUTHORS (FIRST_NAME, LAST_NAME) VALUES (?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, author.getFirstName());
+            stmt.setString(2, author.getLastName());
+            return stmt;
+        }, keyHolder);
+        //noinspection DataFlowIssue
+        return findById(keyHolder.getKeyAs(Long.class));
     }
 
     @Override
@@ -48,8 +58,13 @@ public class AuthorRepository implements CrudRepository<Author>{
 
     @Override
     public Author findById(long id) {
-        return template.queryForObject(
-                "SELECT * FROM AUTHORS WHERE ID = ?", newAuthorMapper(), id);
+        try {
+            return template.queryForObject(
+                    "SELECT * FROM AUTHORS WHERE ID = ?", newAuthorMapper(), id);
+        }
+        catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -61,8 +76,8 @@ public class AuthorRepository implements CrudRepository<Author>{
     }
 
     @Override
-    public void delete(Author author) {
-        template.update("DELETE FROM AUTHORS WHERE ID = ?", author.getId());
+    public void delete(long id) {
+        template.update("DELETE FROM AUTHORS WHERE ID = ?", id);
     }
 
     protected void syncAuthors(Work work) {

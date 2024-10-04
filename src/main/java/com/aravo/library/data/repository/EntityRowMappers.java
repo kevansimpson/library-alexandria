@@ -36,7 +36,7 @@ public class EntityRowMappers {
         @Override
         public Author mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Author(
-                    rs.getInt("ID"),
+                    rs.getLong("ID"),
                     rs.getString("FIRST_NAME"),
                     rs.getString("LAST_NAME"));
         }
@@ -46,8 +46,8 @@ public class EntityRowMappers {
         @Override
         public AvailableFormat mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new AvailableFormat(
-                    rs.getInt("ID"),
-                    rs.getInt("WORK_ID"),
+                    rs.getLong("ID"),
+                    rs.getLong("WORK_ID"),
                     WorkFormat.values()[rs.getInt("FORMAT")],
                     rs.getBigDecimal("SHIPPING_COST"));
         }
@@ -57,12 +57,12 @@ public class EntityRowMappers {
         @Override
         public Citation mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Citation(
-                    rs.getInt("ID"),
-                    rs.getInt("WORK_ID"),
+                    rs.getLong("ID"),
+                    rs.getLong("WORK_ID"),
                     rs.getInt("PAGE_NUMBER"),
                     rs.getString("CITED_WORK"),
                     rs.getString("CITATION_AUTHOR"),
-                    rs.getDate("CITED_WHEN"));
+                    rs.getDate("CITED_WHEN").toLocalDate());
         }
     }
 
@@ -70,8 +70,8 @@ public class EntityRowMappers {
         @Override
         public Forward mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Forward(
-                    rs.getInt("ID"),
-                    rs.getInt("WORK_ID"),
+                    rs.getLong("ID"),
+                    rs.getLong("WORK_ID"),
                     rs.getString("AUTHOR"),
                     rs.getString("FORWARD"));
         }
@@ -81,9 +81,9 @@ public class EntityRowMappers {
         @Override
         public Work mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Work(
-                    rs.getInt("ID"),
+                    rs.getLong("ID"),
                     rs.getString("TITLE"),
-                    rs.getDate("PUBLISHED"),
+                    rs.getDate("PUBLISHED").toLocalDate(),
                     rs.getBoolean("RARE"));
         }
     }
@@ -92,8 +92,8 @@ public class EntityRowMappers {
         @Override
         public VolumeInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new VolumeInfo(
-                    rs.getInt("ID"),
-                    rs.getInt("WORK_ID"),
+                    rs.getLong("ID"),
+                    rs.getLong("WORK_ID"),
                     rs.getInt("VOLUME_NUMBER"),
                     rs.getString("SERIES_TITLE"));
         }
