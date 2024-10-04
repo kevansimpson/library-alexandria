@@ -33,8 +33,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public Author deleteAuthor(long id) {
-        // TODO check for existing works
-        authorRepository.delete(id);
+        if (authorRepository.countWorks(id) == 0)
+            authorRepository.delete(id);
         return findAuthorById(id);
     }
 }

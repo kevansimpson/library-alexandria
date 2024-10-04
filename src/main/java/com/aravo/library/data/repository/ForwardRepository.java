@@ -35,6 +35,10 @@ public class ForwardRepository implements CrudRepository<Forward>{
         }
     }
 
+    public void deleteForwardByWorkId(long workId) {
+        template.update("DELETE FROM FORWARDS WHERE WORK_ID = ?", workId);
+    }
+
     @Override
     public Forward create(Forward forward) {
         KeyHolder keyHolder = new GeneratedKeyHolder();

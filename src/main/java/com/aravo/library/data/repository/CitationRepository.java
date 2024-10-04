@@ -31,6 +31,10 @@ public class CitationRepository implements CrudRepository<Citation> {
         return template.query("SELECT * FROM CITATIONS WHERE WORK_ID = ?", newCitationMapper(), workId);
     }
 
+    public void deleteCitationsByWorkId(long workId) {
+        template.update("DELETE FROM CITATIONS WHERE WORK_ID = ?", workId);
+    }
+
     @Override
     public Citation create(Citation citation) {
         KeyHolder keyHolder = new GeneratedKeyHolder();

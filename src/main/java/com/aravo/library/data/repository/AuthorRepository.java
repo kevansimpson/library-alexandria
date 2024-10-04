@@ -35,6 +35,17 @@ public class AuthorRepository implements CrudRepository<Author>{
                 newAuthorMapper(), workId);
     }
 
+    public int countWorks(long authorId) {
+        Integer exists = template.queryForObject(
+                "SELECT count(*) FROM AUTHOR_WORK_XREF WHERE author_id = ?",
+                Integer.class, authorId);
+        return (exists == null) ? 0 : exists;
+    }
+
+    public void unlinkAuthorsByWorkId(long workId) {
+        template.update("DELETE FROM AUTHOR_WORK_XREF WHERE WORK_ID = ?", workId);
+    }
+
     @Override
     public Author create(Author author) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -59,8 +70,7 @@ public class AuthorRepository implements CrudRepository<Author>{
     @Override
     public Author findById(long id) {
         try {
-            return template.queryForObject(
-                    "SELECT * FROM AUTHORS WHERE ID = ?", newAuthorMapper(), id);
+            return template.queryForObject("SELECT * FROM AUTHORS WHERE ID = ?", newAuthorMapper(), id);
         }
         catch (EmptyResultDataAccessException ex) {
             return null;
@@ -96,5 +106,4 @@ public class AuthorRepository implements CrudRepository<Author>{
                     "INSERT INTO AUTHOR_WORK_XREF (work_id, author_id) VALUES (?, ?)",
                     workId, authorId);
     }
-
 }

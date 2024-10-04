@@ -96,7 +96,10 @@ public class WorkRepository implements CrudRepository<Work> {
 
     @Override @Transactional
     public void delete(long id) {
-        // TODO cascading delete
+        authorRepository.unlinkAuthorsByWorkId(id);
+        citationRepository.deleteCitationsByWorkId(id);
+        forwardRepository.deleteForwardByWorkId(id);
+        volumeRepository.deleteVolumeInfoByWorkId(id);
         template.update("DELETE FROM WORKS WHERE ID = ?", id);
     }
 

@@ -30,6 +30,10 @@ public class AvailableFormatRepository implements CrudRepository<AvailableFormat
         return template.query("SELECT * FROM FORMATS WHERE WORK_ID = ?", newAvailableFormatMapper(), workId);
     }
 
+    public void deleteFormatsByWorkId(long workId) {
+        template.update("DELETE FROM FORMATS WHERE WORK_ID = ?", workId);
+    }
+
     @Override
     public AvailableFormat create(AvailableFormat format) {
         KeyHolder keyHolder = new GeneratedKeyHolder();

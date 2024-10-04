@@ -35,6 +35,10 @@ public class VolumeRepository implements CrudRepository<VolumeInfo>{
         }
     }
 
+    public void deleteVolumeInfoByWorkId(long workId) {
+        template.update("DELETE FROM VOLUMES WHERE WORK_ID = ?", workId);
+    }
+
     @Override
     public VolumeInfo create(VolumeInfo info) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -60,8 +64,7 @@ public class VolumeRepository implements CrudRepository<VolumeInfo>{
     @Override
     public VolumeInfo findById(long id) {
         try {
-            return template.queryForObject(
-                    "SELECT * FROM VOLUMES WHERE ID = ?", newVolumeInfoMapper(), id);
+            return template.queryForObject("SELECT * FROM VOLUMES WHERE ID = ?", newVolumeInfoMapper(), id);
         }
         catch (EmptyResultDataAccessException ex) {
             return null;
