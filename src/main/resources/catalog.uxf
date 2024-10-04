@@ -23,12 +23,13 @@ last_name: VARCHAR(50)</panel_attributes>
       <x>0</x>
       <y>230</y>
       <w>180</w>
-      <h>70</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>_AUTHOR_WORK_XREF_
 --
-work_id: BIGINT (PK1)
-author_id: BIGINT (PK2)</panel_attributes>
+ID: BIGINT (PK)
+work_id: BIGINT (FK1)
+author_id: BIGINT (FK2)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
