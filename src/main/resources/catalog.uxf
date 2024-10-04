@@ -12,7 +12,7 @@
     </coordinates>
     <panel_attributes>_AUTHORS_
 --
-id: INT
+id: BIGINT
 first_name: VARCHAR(50)
 last_name: VARCHAR(50)</panel_attributes>
     <additional_attributes/>
@@ -22,13 +22,13 @@ last_name: VARCHAR(50)</panel_attributes>
     <coordinates>
       <x>0</x>
       <y>230</y>
-      <w>150</w>
+      <w>180</w>
       <h>70</h>
     </coordinates>
     <panel_attributes>_AUTHOR_WORK_XREF_
 --
-work_id: INT (PK1)
-author_id: INT (PK2)</panel_attributes>
+work_id: BIGINT (PK1)
+author_id: BIGINT (PK2)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -41,7 +41,7 @@ author_id: INT (PK2)</panel_attributes>
     </coordinates>
     <panel_attributes>_WORKS_
 --
-id: INT
+id: BIGINT
 title: VARCHAR(250)
 published: DATE
 rare: BOOLEAN</panel_attributes>
@@ -57,8 +57,8 @@ rare: BOOLEAN</panel_attributes>
     </coordinates>
     <panel_attributes>_FORMATS_
 --
-id: INT
-work_id: INT (FK)
+id: BIGINT
+work_id: BIGINT (FK)
 format: SMALLINT
 shipping_cost: DECIMAL</panel_attributes>
     <additional_attributes/>
@@ -73,8 +73,8 @@ shipping_cost: DECIMAL</panel_attributes>
     </coordinates>
     <panel_attributes>_CITATIONS_
 --
-id: INT
-work_id: INT (FK)
+id: BIGINT
+work_id: BIGINT (FK)
 page_number: INT
 cited_work: VARCHAR(250)
 citation_author: VARCHAR(100)
@@ -91,8 +91,8 @@ cited_when: DATE</panel_attributes>
     </coordinates>
     <panel_attributes>_VOLUMES_
 --
-id: INT
-work_id: INT (FK)
+id: BIGINT
+work_id: BIGINT (FK)
 volume_number: SMALLINT
 series_title: VARCHAR(100)</panel_attributes>
     <additional_attributes/>
@@ -121,8 +121,8 @@ m2=0..1
     </coordinates>
     <panel_attributes>_FORWARDS_
 --
-id: INT
-work_id: INT (FK)
+id: BIGINT
+work_id: BIGINT (FK)
 author: VARCHAR(100)
 forward: LONGTEXT</panel_attributes>
     <additional_attributes/>
@@ -158,16 +158,16 @@ m2=0..n
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>140</x>
+      <x>170</x>
       <y>260</y>
-      <w>180</w>
+      <w>150</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=0..1
 </panel_attributes>
-    <additional_attributes>160.0;20.0;10.0;20.0</additional_attributes>
+    <additional_attributes>130.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
