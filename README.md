@@ -19,3 +19,11 @@
 ### Conventions and Assumptions
 * Authors and Works can be independent of each other. An Author can have zero Works and a Work can be anonymously written with zero Authors.
 * Works endpoints offer cascading behavior; meaning the entire Work object graph will be utilized.
+
+### Seed Data
+By default, the application is seeded with sample data to exercise all of the entities.
+To start the application _without_ seed data, run the following command:
+
+```shell
+./mvnw clean spring-boot:run -Dspring-boot.run.arguments="--seed.data=false"
+```

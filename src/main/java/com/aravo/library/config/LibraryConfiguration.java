@@ -5,6 +5,7 @@ import com.aravo.library.data.entity.*;
 import com.aravo.library.data.repository.AuthorRepository;
 import com.aravo.library.data.repository.WorkRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 @Configuration
 public class LibraryConfiguration {
     @Bean
+    @ConditionalOnProperty(name = "seed.data", havingValue = "true", matchIfMissing = true)
     public CommandLineRunner loadSeedData(
             AuthorRepository authorRepository,
             WorkRepository workRepository) {
