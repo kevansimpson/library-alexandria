@@ -20,10 +20,12 @@ import static com.aravo.library.data.repository.EntityRowMappers.newAvailableFor
 public class AvailableFormatRepository implements CrudRepository<AvailableFormat> {
 
     private final JdbcTemplate template;
+    private final OrphanRemover orphanRemover;
 
     @Autowired
-    public AvailableFormatRepository(JdbcTemplate jdbc) {
+    public AvailableFormatRepository(JdbcTemplate jdbc, OrphanRemover remover) {
         template = jdbc;
+        orphanRemover = remover;
     }
 
     public List<AvailableFormat> findFormatsByWorkId(long workId) {
@@ -84,6 +86,7 @@ public class AvailableFormatRepository implements CrudRepository<AvailableFormat
                     return save(f);
                 })
                 .collect(Collectors.toSet());
+        orphanRemover.removeOrphans(work, formats, "FORMATS");
         work.setFormats(formats);
     }
 }

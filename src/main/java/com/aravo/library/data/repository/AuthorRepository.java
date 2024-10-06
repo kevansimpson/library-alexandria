@@ -21,10 +21,12 @@ import static com.aravo.library.data.repository.EntityRowMappers.newAuthorMapper
 public class AuthorRepository implements CrudRepository<Author>{
 
     private final JdbcTemplate template;
+    private final OrphanRemover orphanRemover;
 
     @Autowired
-    public AuthorRepository(JdbcTemplate jdbc) {
+    public AuthorRepository(JdbcTemplate jdbc, OrphanRemover remover) {
         template = jdbc;
+        orphanRemover = remover;
     }
 
     public List<Author> findAuthorsByWorkId(long workId) {
@@ -63,8 +65,7 @@ public class AuthorRepository implements CrudRepository<Author>{
 
     @Override
     public List<Author> findAll() {
-        return template.query(
-                "SELECT * FROM AUTHORS ORDER BY LAST_NAME, FIRST_NAME", newAuthorMapper());
+        return template.query("SELECT * FROM AUTHORS ORDER BY LAST_NAME, FIRST_NAME", newAuthorMapper());
     }
 
     @Override
@@ -94,6 +95,7 @@ public class AuthorRepository implements CrudRepository<Author>{
         Set<Author> authors = work.getAuthors().stream()
                 .map(this::save).collect(Collectors.toSet());
         authors.forEach(a -> linkAuthorWork(work.getId(), a.getId()));
+        orphanRemover.removeOrphans(work, authors, "AUTHOR_WORK_XREF", "author_id");
         work.setAuthors(authors);
     }
 

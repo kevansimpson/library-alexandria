@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Set;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newForwardMapper;
 
@@ -19,10 +20,12 @@ import static com.aravo.library.data.repository.EntityRowMappers.newForwardMappe
 public class ForwardRepository implements CrudRepository<Forward>{
 
     private final JdbcTemplate template;
+    private final OrphanRemover orphanRemover;
 
     @Autowired
-    public ForwardRepository(JdbcTemplate jdbc) {
+    public ForwardRepository(JdbcTemplate jdbc, OrphanRemover remover) {
         template = jdbc;
+        orphanRemover = remover;
     }
 
     public Forward findForwardByWorkId(long workId) {
@@ -90,8 +93,9 @@ public class ForwardRepository implements CrudRepository<Forward>{
         if (forward != null) {
             forward.setWorkId(work.getId());
             work.setForward(save(forward));
+            orphanRemover.removeOrphans(work, Set.of(work.getForward()), "FORWARDS");
         }
         else
-            work.setForward(findForwardByWorkId(work.getId()));
+            orphanRemover.removeAllOrphans(work, "FORWARDS");
     }
 }

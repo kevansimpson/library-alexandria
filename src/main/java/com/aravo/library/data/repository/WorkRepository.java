@@ -98,6 +98,7 @@ public class WorkRepository implements CrudRepository<Work> {
     public void delete(long id) {
         authorRepository.unlinkAuthorsByWorkId(id);
         citationRepository.deleteCitationsByWorkId(id);
+        formatsRepository.deleteFormatsByWorkId(id);
         forwardRepository.deleteForwardByWorkId(id);
         volumeRepository.deleteVolumeInfoByWorkId(id);
         template.update("DELETE FROM WORKS WHERE ID = ?", id);

@@ -21,10 +21,12 @@ import static com.aravo.library.data.repository.EntityRowMappers.newCitationMapp
 public class CitationRepository implements CrudRepository<Citation> {
 
     private final JdbcTemplate template;
+    private final OrphanRemover orphanRemover;
 
     @Autowired
-    public CitationRepository(JdbcTemplate jdbc) {
+    public CitationRepository(JdbcTemplate jdbc, OrphanRemover remover) {
         template = jdbc;
+        orphanRemover = remover;
     }
 
     public List<Citation> findCitationsByWorkId(long workId) {
@@ -85,6 +87,7 @@ public class CitationRepository implements CrudRepository<Citation> {
                     return save(c);
                 })
                 .collect(Collectors.toSet());
+        orphanRemover.removeOrphans(work, citations, "CITATIONS");
         work.setCitations(citations);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Set;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newVolumeInfoMapper;
 
@@ -19,10 +20,12 @@ import static com.aravo.library.data.repository.EntityRowMappers.newVolumeInfoMa
 public class VolumeRepository implements CrudRepository<VolumeInfo>{
 
     private final JdbcTemplate template;
+    private final OrphanRemover orphanRemover;
 
     @Autowired
-    public VolumeRepository(JdbcTemplate jdbc) {
+    public VolumeRepository(JdbcTemplate jdbc, OrphanRemover remover) {
         template = jdbc;
+        orphanRemover = remover;
     }
 
     public VolumeInfo findVolumeInfoByWorkId(long workId) {
@@ -89,8 +92,9 @@ public class VolumeRepository implements CrudRepository<VolumeInfo>{
         if (info != null) {
             info.setWorkId(work.getId());
             work.setVolumeInfo(save(info));
+            orphanRemover.removeOrphans(work, Set.of(work.getVolumeInfo()), "VOLUMES");
         }
         else
-            work.setVolumeInfo(findVolumeInfoByWorkId(work.getId()));
+            orphanRemover.removeAllOrphans(work, "VOLUMES");
     }
 }
