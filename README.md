@@ -7,6 +7,8 @@
 * Service layer components for Authors and Works
 * Endpoints via controllers for Authors and Works
 * Integration tests to verify correct behavior
+* Intellij coverage report is available at:
+  * https://kevansimpson.github.io/library-alexandria/
 * Data model diagram, which is available:
   * [via source code](./src/main/resources/public/catalog.png)
   * [via endpoint](http://localhost:8080/catalog.png)
