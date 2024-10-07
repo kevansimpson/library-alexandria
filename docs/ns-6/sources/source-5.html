@@ -1,0 +1,325 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EntityRowMappers</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aravo.library.data.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: EntityRowMappers (com.aravo.library.data.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EntityRowMappers</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">EntityRowMappers$AuthorMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">EntityRowMappers$AvailableFormatMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">EntityRowMappers$CitationMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">EntityRowMappers$ForwardMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">EntityRowMappers$VolumeInfoMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">EntityRowMappers$WorkMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    94.7%
+  </span>
+  <span class="absValue">
+    (18/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.7%
+  </span>
+  <span class="absValue">
+    (43/44)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aravo.library.data.repository;
+&nbsp;
+&nbsp;import com.aravo.library.data.WorkFormat;
+&nbsp;import com.aravo.library.data.entity.*;
+&nbsp;import org.springframework.jdbc.core.RowMapper;
+&nbsp;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;
+<b class="nc">&nbsp;public class EntityRowMappers {</b>
+&nbsp;    public static AuthorMapper newAuthorMapper() {
+<b class="fc">&nbsp;        return new AuthorMapper();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static AvailableFormatMapper newAvailableFormatMapper() {
+<b class="fc">&nbsp;        return new AvailableFormatMapper();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static CitationMapper newCitationMapper() {
+<b class="fc">&nbsp;        return new CitationMapper();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static ForwardMapper newForwardMapper() {
+<b class="fc">&nbsp;        return new ForwardMapper();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static VolumeInfoMapper newVolumeInfoMapper() {
+<b class="fc">&nbsp;        return new VolumeInfoMapper();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static WorkMapper newWorkMapper() {
+<b class="fc">&nbsp;        return new WorkMapper();</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static class AuthorMapper implements RowMapper&lt;Author&gt; {</b>
+&nbsp;        @Override
+&nbsp;        public Author mapRow(ResultSet rs, int rowNum) throws SQLException {
+<b class="fc">&nbsp;            return new Author(</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;FIRST_NAME&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;LAST_NAME&quot;));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static class AvailableFormatMapper implements RowMapper&lt;AvailableFormat&gt; {</b>
+&nbsp;        @Override
+&nbsp;        public AvailableFormat mapRow(ResultSet rs, int rowNum) throws SQLException {
+<b class="fc">&nbsp;            return new AvailableFormat(</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;WORK_ID&quot;),</b>
+<b class="fc">&nbsp;                    WorkFormat.values()[rs.getInt(&quot;FORMAT&quot;)],</b>
+<b class="fc">&nbsp;                    rs.getBigDecimal(&quot;SHIPPING_COST&quot;));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static class CitationMapper implements RowMapper&lt;Citation&gt; {</b>
+&nbsp;        @Override
+&nbsp;        public Citation mapRow(ResultSet rs, int rowNum) throws SQLException {
+<b class="fc">&nbsp;            return new Citation(</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;WORK_ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getInt(&quot;PAGE_NUMBER&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;CITED_WORK&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;CITATION_AUTHOR&quot;),</b>
+<b class="fc">&nbsp;                    rs.getDate(&quot;CITED_WHEN&quot;).toLocalDate());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static class ForwardMapper implements RowMapper&lt;Forward&gt; {</b>
+&nbsp;        @Override
+&nbsp;        public Forward mapRow(ResultSet rs, int rowNum) throws SQLException {
+<b class="fc">&nbsp;            return new Forward(</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;WORK_ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;AUTHOR&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;FORWARD&quot;));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static class WorkMapper implements RowMapper&lt;Work&gt; {</b>
+&nbsp;        @Override
+&nbsp;        public Work mapRow(ResultSet rs, int rowNum) throws SQLException {
+<b class="fc">&nbsp;            return new Work(</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;TITLE&quot;),</b>
+<b class="fc">&nbsp;                    rs.getDate(&quot;PUBLISHED&quot;).toLocalDate(),</b>
+<b class="fc">&nbsp;                    rs.getBoolean(&quot;RARE&quot;));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static class VolumeInfoMapper implements RowMapper&lt;VolumeInfo&gt; {</b>
+&nbsp;        @Override
+&nbsp;        public VolumeInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+<b class="fc">&nbsp;            return new VolumeInfo(</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getLong(&quot;WORK_ID&quot;),</b>
+<b class="fc">&nbsp;                    rs.getInt(&quot;VOLUME_NUMBER&quot;),</b>
+<b class="fc">&nbsp;                    rs.getString(&quot;SERIES_TITLE&quot;));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-06 19:11</div>
+</div>
+</body>
+</html>

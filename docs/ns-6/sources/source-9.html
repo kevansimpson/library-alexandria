@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > WorkRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aravo.library.data.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: WorkRepository (com.aravo.library.data.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WorkRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (45/45)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">WorkRepository$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (45/45)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aravo.library.data.repository;
+&nbsp;
+&nbsp;import com.aravo.library.data.entity.Work;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.dao.EmptyResultDataAccessException;
+&nbsp;import org.springframework.jdbc.core.JdbcTemplate;
+&nbsp;import org.springframework.jdbc.support.GeneratedKeyHolder;
+&nbsp;import org.springframework.jdbc.support.KeyHolder;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import java.sql.Date;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.Statement;
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import static com.aravo.library.data.repository.EntityRowMappers.newWorkMapper;
+&nbsp;
+&nbsp;@Repository
+&nbsp;public class WorkRepository implements CrudRepository&lt;Work&gt; {
+&nbsp;    private final JdbcTemplate template;
+&nbsp;    private final AuthorRepository authorRepository;
+&nbsp;    private final AvailableFormatRepository formatsRepository;
+&nbsp;    private final CitationRepository citationRepository;
+&nbsp;    private final ForwardRepository forwardRepository;
+&nbsp;    private final VolumeRepository volumeRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public WorkRepository(
+&nbsp;            JdbcTemplate jdbc,
+&nbsp;            AuthorRepository authors,
+&nbsp;            AvailableFormatRepository formats,
+&nbsp;            CitationRepository citations,
+&nbsp;            ForwardRepository forwards,
+<b class="fc">&nbsp;            VolumeRepository volumes) {</b>
+<b class="fc">&nbsp;        template = jdbc;</b>
+<b class="fc">&nbsp;        authorRepository = authors;</b>
+<b class="fc">&nbsp;        citationRepository = citations;</b>
+<b class="fc">&nbsp;        formatsRepository = formats;</b>
+<b class="fc">&nbsp;        forwardRepository = forwards;</b>
+<b class="fc">&nbsp;        volumeRepository = volumes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override @Transactional
+&nbsp;    public Work save(Work entity) {
+<b class="fc">&nbsp;        Work work = CrudRepository.super.save(entity);</b>
+<b class="fc">&nbsp;        entity.setId(work.getId());</b>
+<b class="fc">&nbsp;        authorRepository.syncAuthors(entity);</b>
+<b class="fc">&nbsp;        citationRepository.syncCitations(entity);</b>
+<b class="fc">&nbsp;        formatsRepository.syncAvailableFormats(entity);</b>
+<b class="fc">&nbsp;        forwardRepository.syncForward(entity);</b>
+<b class="fc">&nbsp;        volumeRepository.syncVolumeInfo(entity);</b>
+<b class="fc">&nbsp;        return work;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Work create(Work work) {
+<b class="fc">&nbsp;        KeyHolder keyHolder = new GeneratedKeyHolder();</b>
+<b class="fc">&nbsp;        template.update(connection -&gt; {</b>
+<b class="fc">&nbsp;            PreparedStatement stmt = connection.prepareStatement(</b>
+&nbsp;                    &quot;INSERT INTO WORKS (TITLE, PUBLISHED, RARE) VALUES (?, ?, ?)&quot;,
+&nbsp;                    Statement.RETURN_GENERATED_KEYS);
+<b class="fc">&nbsp;            stmt.setString(1, work.getTitle());</b>
+<b class="fc">&nbsp;            stmt.setDate(2, Date.valueOf(work.getPublished()));</b>
+<b class="fc">&nbsp;            stmt.setBoolean(3, work.isRare());</b>
+<b class="fc">&nbsp;            return stmt;</b>
+&nbsp;        }, keyHolder);
+&nbsp;        //noinspection DataFlowIssue
+<b class="fc">&nbsp;        return findById(keyHolder.getKeyAs(Long.class));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Work&gt; findAll() {
+<b class="fc">&nbsp;        return template.query(</b>
+<b class="fc">&nbsp;                &quot;SELECT * FROM WORKS ORDER BY TITLE&quot;, newWorkMapper())</b>
+<b class="fc">&nbsp;                .stream().map(this::load).collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Work findById(long id) {
+&nbsp;        try {
+<b class="fc">&nbsp;            return load(template.queryForObject(&quot;SELECT * FROM WORKS WHERE ID = ?&quot;, newWorkMapper(), id));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        catch (EmptyResultDataAccessException ex) {</b>
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Work update(Work work) {
+<b class="fc">&nbsp;        int update = template.update(</b>
+&nbsp;                &quot;UPDATE WORKS SET TITLE = ?, PUBLISHED = ?, RARE = ? WHERE ID = ?&quot;,
+<b class="fc">&nbsp;                work.getTitle(), work.getPublished(), work.isRare(), work.getId());</b>
+<b class="fc">&nbsp;        return (update == 0) ? null : work;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override @Transactional
+&nbsp;    public boolean delete(long id) {
+<b class="fc">&nbsp;        authorRepository.unlinkAuthorsByWorkId(id);</b>
+<b class="fc">&nbsp;        citationRepository.deleteCitationsByWorkId(id);</b>
+<b class="fc">&nbsp;        formatsRepository.deleteFormatsByWorkId(id);</b>
+<b class="fc">&nbsp;        forwardRepository.deleteForwardByWorkId(id);</b>
+<b class="fc">&nbsp;        volumeRepository.deleteVolumeInfoByWorkId(id);</b>
+<b class="fc">&nbsp;        return template.update(&quot;DELETE FROM WORKS WHERE ID = ?&quot;, id) &gt; 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected Work load(Work work) {
+<b class="fc">&nbsp;        if (work != null) {</b>
+<b class="fc">&nbsp;            authorRepository.findAuthorsByWorkId(work.getId()).forEach(work::addAuthor);</b>
+<b class="fc">&nbsp;            citationRepository.findCitationsByWorkId(work.getId()).forEach(work::addCitation);</b>
+<b class="fc">&nbsp;            formatsRepository.findFormatsByWorkId(work.getId()).forEach(work::addFormat);</b>
+<b class="fc">&nbsp;            work.setForward(forwardRepository.findForwardByWorkId(work.getId()));</b>
+<b class="fc">&nbsp;            work.setVolumeInfo(volumeRepository.findVolumeInfoByWorkId(work.getId()));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return work;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-06 19:11</div>
+</div>
+</body>
+</html>

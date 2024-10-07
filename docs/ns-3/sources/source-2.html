@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > WorkController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aravo.library.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: WorkController (com.aravo.library.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WorkController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aravo.library.controller;
+&nbsp;
+&nbsp;import com.aravo.library.data.entity.Work;
+&nbsp;import com.aravo.library.service.WorkService;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/work&quot;)
+&nbsp;public class WorkController {
+&nbsp;
+&nbsp;    private final WorkService workService;
+&nbsp;
+&nbsp;    @Autowired
+<b class="fc">&nbsp;    public WorkController(WorkService service) {</b>
+<b class="fc">&nbsp;        workService = service;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping
+&nbsp;    public ResponseEntity&lt;Work&gt; createWork(@RequestBody Work work) {
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(workService.createWork(work), HttpStatus.CREATED);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(path = &quot;/{id}&quot;, produces = &quot;application/json&quot;)
+&nbsp;    public ResponseEntity&lt;Work&gt; findWork(@PathVariable long id) {
+<b class="fc">&nbsp;        Work work = workService.findWorkById(id);</b>
+<b class="fc">&nbsp;        if (work == null)</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</b>
+&nbsp;        else
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(work, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(produces = &quot;application/json&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;Work&gt;&gt; getWorks() {
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(workService.fetchWorks(), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping
+&nbsp;    public ResponseEntity&lt;Work&gt; updateWork(@RequestBody Work work) {
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(workService.updateWork(work), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(path = &quot;/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Work&gt; deleteWork(@PathVariable long id) {
+<b class="fc">&nbsp;        if (workService.deleteWork(id))</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</b>
+&nbsp;        else
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-06 19:11</div>
+</div>
+</body>
+</html>

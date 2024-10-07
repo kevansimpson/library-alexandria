@@ -1,0 +1,136 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AvailableFormat</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aravo.library.data.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: AvailableFormat (com.aravo.library.data.entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AvailableFormat</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aravo.library.data.entity;
+&nbsp;
+&nbsp;import com.aravo.library.data.Persistable;
+&nbsp;import com.aravo.library.data.WorkFormat;
+&nbsp;import com.fasterxml.jackson.annotation.JsonInclude;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.io.Serializable;
+&nbsp;import java.math.BigDecimal;
+&nbsp;
+&nbsp;import static com.fasterxml.jackson.annotation.JsonInclude.Include.*;
+&nbsp;
+&nbsp;@AllArgsConstructor
+&nbsp;@NoArgsConstructor
+&nbsp;@Data
+&nbsp;@JsonInclude(NON_NULL)
+&nbsp;public class AvailableFormat implements Serializable, Persistable {
+&nbsp;    private long id;
+&nbsp;    private long workId;
+&nbsp;    private WorkFormat workFormat;
+&nbsp;    private BigDecimal shippingCost;
+&nbsp;
+&nbsp;    public AvailableFormat(WorkFormat format) {
+<b class="fc">&nbsp;        this(format, null);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public AvailableFormat(WorkFormat format, BigDecimal shippingCost) {</b>
+<b class="fc">&nbsp;        setWorkFormat(format);</b>
+<b class="fc">&nbsp;        setShippingCost(shippingCost);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-06 19:11</div>
+</div>
+</body>
+</html>
