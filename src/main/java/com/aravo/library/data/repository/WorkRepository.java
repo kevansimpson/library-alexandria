@@ -45,11 +45,12 @@ public class WorkRepository implements CrudRepository<Work> {
     @Override @Transactional
     public Work save(Work entity) {
         Work work = CrudRepository.super.save(entity);
-        authorRepository.syncAuthors(work);
-        citationRepository.syncCitations(work);
-        formatsRepository.syncAvailableFormats(work);
-        forwardRepository.syncForward(work);
-        volumeRepository.syncVolumeInfo(work);
+        entity.setId(work.getId());
+        authorRepository.syncAuthors(entity);
+        citationRepository.syncCitations(entity);
+        formatsRepository.syncAvailableFormats(entity);
+        forwardRepository.syncForward(entity);
+        volumeRepository.syncVolumeInfo(entity);
         return work;
     }
 
@@ -95,13 +96,13 @@ public class WorkRepository implements CrudRepository<Work> {
     }
 
     @Override @Transactional
-    public void delete(long id) {
+    public boolean delete(long id) {
         authorRepository.unlinkAuthorsByWorkId(id);
         citationRepository.deleteCitationsByWorkId(id);
         formatsRepository.deleteFormatsByWorkId(id);
         forwardRepository.deleteForwardByWorkId(id);
         volumeRepository.deleteVolumeInfoByWorkId(id);
-        template.update("DELETE FROM WORKS WHERE ID = ?", id);
+        return template.update("DELETE FROM WORKS WHERE ID = ?", id) > 0;
     }
 
     protected Work load(Work work) {

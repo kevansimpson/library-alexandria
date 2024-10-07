@@ -46,10 +46,9 @@ public class WorkController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Work> deleteWork(@PathVariable long id) {
-        Work toBeDeleted = workService.deleteWork(id);
-        if (toBeDeleted == null)
+        if (workService.deleteWork(id))
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         else
-            return new ResponseEntity<>(toBeDeleted, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

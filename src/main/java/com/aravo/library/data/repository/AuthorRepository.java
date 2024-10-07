@@ -87,8 +87,8 @@ public class AuthorRepository implements CrudRepository<Author>{
     }
 
     @Override
-    public void delete(long id) {
-        template.update("DELETE FROM AUTHORS WHERE ID = ?", id);
+    public boolean delete(long id) {
+        return template.update("DELETE FROM AUTHORS WHERE ID = ?", id) > 0;
     }
 
     protected void syncAuthors(Work work) {

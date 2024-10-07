@@ -76,8 +76,8 @@ public class CitationRepository implements CrudRepository<Citation> {
     }
 
     @Override
-    public void delete(long id) {
-        template.update("DELETE FROM CITATIONS WHERE ID = ?", id);
+    public boolean delete(long id) {
+        return template.update("DELETE FROM CITATIONS WHERE ID = ?", id) > 0;
     }
 
     protected void syncCitations(Work work) {

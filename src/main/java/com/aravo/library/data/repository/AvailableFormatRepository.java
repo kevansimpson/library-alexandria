@@ -74,8 +74,8 @@ public class AvailableFormatRepository implements CrudRepository<AvailableFormat
     }
 
     @Override
-    public void delete(long id) {
-        template.update("DELETE FROM FORMATS WHERE ID = ?", id);
+    public boolean delete(long id) {
+        return template.update("DELETE FROM FORMATS WHERE ID = ?", id) > 0;
     }
 
 

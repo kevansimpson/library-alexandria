@@ -6,13 +6,14 @@
 * Persistence mechanisms for all entities
 * Service layer components for Authors and Works
 * Endpoints via controllers for Authors and Works
+* Integration tests to verify correct behavior
 * Data model diagram, which is available:
   * [via source code](./src/main/resources/public/catalog.png)
   * [via endpoint](http://localhost:8080/catalog.png)
 
 ### Work To Be Done
 
-* Unit and integration tests
+* Unit tests
 * Logging
 * Endpoints/controllers for child entities of Works
 
@@ -27,3 +28,5 @@ To start the application _without_ seed data, run the following command:
 ```shell
 ./mvnw clean spring-boot:run -Dspring-boot.run.arguments="--seed.data=false"
 ```
+
+__Note:__ Integration tests (i.e. ones annotated with `@SpringBootTest`, rely on presence of seed data.

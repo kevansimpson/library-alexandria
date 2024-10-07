@@ -9,7 +9,7 @@ public interface CrudRepository<T extends Persistable> {
     List<T> findAll();
     T findById(long id);
     T update(T entity);
-    void delete(long id);
+    boolean delete(long id);
 
     default T save(T entity) {
         return (entity.getId() == 0) ? create(entity) : update(entity);

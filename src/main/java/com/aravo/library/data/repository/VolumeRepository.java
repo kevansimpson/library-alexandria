@@ -77,14 +77,14 @@ public class VolumeRepository implements CrudRepository<VolumeInfo>{
     @Override
     public VolumeInfo update(VolumeInfo info) {
         int update = template.update(
-                "UPDATE VOLUMES SET WORK_ID = ?, VOLUME_NUMBER = ?, SERIES_TITLE WHERE ID = ?",
+                "UPDATE VOLUMES SET WORK_ID = ?, VOLUME_NUMBER = ?, SERIES_TITLE = ? WHERE ID = ?",
                 info.getWorkId(), info.getVolume(), info.getSeriesTitle(), info.getId());
         return (update == 0) ? null : info;
     }
 
     @Override
-    public void delete(long id) {
-        template.update("DELETE FROM VOLUMES WHERE ID = ?", id);
+    public boolean delete(long id) {
+        return template.update("DELETE FROM VOLUMES WHERE ID = ?", id) > 0;
     }
 
     protected void syncVolumeInfo(Work work) {

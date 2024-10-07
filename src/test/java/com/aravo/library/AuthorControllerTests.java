@@ -2,8 +2,10 @@ package com.aravo.library;
 
 import com.aravo.library.controller.AuthorController;
 import com.aravo.library.data.entity.Author;
+import com.aravo.library.data.entity.Work;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +27,7 @@ class AuthorControllerTests {
     @Autowired
     private AuthorController authorController;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = JsonMapper.builder().findAndAddModules().build();
     @LocalServerPort
     private int port;
     @Autowired
@@ -81,6 +83,19 @@ class AuthorControllerTests {
         assertThat(findNone.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
+
+    @Test @DirtiesContext
+    void testCannotDeleteAuthorWithWorks() {
+        ResponseEntity<Work> entity = restTemplate.getForEntity(workUrl() + "/1", Work.class);
+        Work work = objectMapper.convertValue(entity.getBody(), new TypeReference<>() {});
+        assertThat(work.getAuthors().size()).isEqualTo(1);
+        Author author = work.getAuthors().iterator().next();
+        assertThat(author.getId()).isGreaterThan(0);
+        ResponseEntity<Author> deleteAttempt = authorController.deleteAuthor(author.getId());
+        assertThat(deleteAttempt).isNotNull();
+        assertThat(deleteAttempt.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
     private void verifyNewAuthor(Author kevan, String appended) {
         assertThat(kevan).isNotNull();
         assertThat(kevan.getFirstName()).isEqualTo("Kevan" + appended);
@@ -90,5 +105,9 @@ class AuthorControllerTests {
 
     private String authorUrl() {
         return "http://localhost:" + port + "/author";
+    }
+
+    private String workUrl() {
+        return "http://localhost:" + port + "/work";
     }
 }

@@ -78,14 +78,14 @@ public class ForwardRepository implements CrudRepository<Forward>{
     @Override
     public Forward update(Forward forward) {
         int update = template.update(
-                "UPDATE FORWARDS SET WORK_ID = ?, AUTHOR = ?, FORWARD WHERE ID = ?",
+                "UPDATE FORWARDS SET WORK_ID = ?, AUTHOR = ?, FORWARD = ? WHERE ID = ?",
                 forward.getWorkId(), forward.getAuthor(), forward.getForwardText(), forward.getId());
         return (update == 0) ? null : forward;
     }
 
     @Override
-    public void delete(long id) {
-        template.update("DELETE FROM FORWARDS WHERE ID = ?", id);
+    public boolean delete(long id) {
+        return template.update("DELETE FROM FORWARDS WHERE ID = ?", id) > 0;
     }
 
     protected void syncForward(Work work) {

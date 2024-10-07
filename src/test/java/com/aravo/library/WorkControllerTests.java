@@ -110,7 +110,11 @@ class WorkControllerTests {
         assertThat(find3.getStatusCode()).isEqualTo(HttpStatus.OK);
         Work updated = objectMapper.convertValue(find3.getBody(), new TypeReference<>() {});
         verifyNewWork(updated, ": No Really, It's Fake");
-        // TODO verify child entities
+        verifyCitation(updated, citation);
+        verifyAvailableFormat(updated, format);
+        verifyForward(updated, forward);
+        verifyVolume(updated, volume);
+
         // delete
         restTemplate.delete(workUrl() + "/10");
         ResponseEntity<Work> findNone = restTemplate.getForEntity(workUrl() + "/10", Work.class);
@@ -118,12 +122,56 @@ class WorkControllerTests {
         assertThat(findNone.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
-    private void verifyNewWork(Work madeUp, String appended) {
+
+    @Test @DirtiesContext
+    void testCannotDeleteMissingWork() {
+        ResponseEntity<Work> entity = workController.deleteWork(1000);
+        assertThat(entity).isNotNull();
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+     private void verifyNewWork(Work madeUp, String appended) {
         assertThat(madeUp).isNotNull();
         assertThat(madeUp.getId()).isEqualTo(10);
         assertThat(madeUp.getTitle()).isEqualTo("Made Up Book" + appended);
         assertThat(madeUp.getPublished()).isEqualTo(LocalDate.of(2024, 10, 1));
         assertThat(madeUp.isRare()).isEqualTo(false);
+    }
+
+    private void verifyCitation(Work updated, Citation citation) {
+        assertThat(citation.getId()).isEqualTo(0);
+        assertThat(citation.getWorkId()).isEqualTo(0);
+        citation.setId(2); // seed data contains 1 citation
+        citation.setWorkId(10);
+        assertThat(updated.getCitations().size()).isEqualTo(1);
+        assertThat(updated.getCitations()).isEqualTo(Set.of(citation));
+    }
+
+    private void verifyAvailableFormat(Work updated, AvailableFormat format) {
+        assertThat(format.getId()).isEqualTo(0);
+        assertThat(format.getWorkId()).isEqualTo(0);
+        format.setId(11); // seed data contains 10 formats
+        format.setWorkId(10);
+        assertThat(updated.getFormats().size()).isEqualTo(1);
+        assertThat(updated.getFormats()).isEqualTo(Set.of(format));
+    }
+
+    private void verifyForward(Work updated, Forward forward) {
+        assertThat(forward.getId()).isEqualTo(0);
+        assertThat(forward.getWorkId()).isEqualTo(0);
+        forward.setId(2); // seed data contains 1 forward
+        forward.setWorkId(10);
+        assertThat(updated.getForward()).isNotNull();
+        assertThat(updated.getForward()).isEqualTo(forward);
+    }
+
+    private void verifyVolume(Work updated, VolumeInfo volume) {
+        assertThat(volume.getId()).isEqualTo(0);
+        assertThat(volume.getWorkId()).isEqualTo(0);
+        volume.setId(8); // seed data contains 7 volumes
+        volume.setWorkId(10);
+        assertThat(updated.getVolumeInfo()).isNotNull();
+        assertThat(updated.getVolumeInfo()).isEqualTo(volume);
     }
 
     private String workUrl() {

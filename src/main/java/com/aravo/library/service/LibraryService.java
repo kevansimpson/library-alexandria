@@ -37,8 +37,7 @@ public class LibraryService implements WorkService {
     }
 
     @Override
-    public Work deleteWork(long id) {
-        workRepository.delete(id);
-        return findWorkById(id);
+    public boolean deleteWork(long id) {
+        return workRepository.delete(id);
     }
 }
