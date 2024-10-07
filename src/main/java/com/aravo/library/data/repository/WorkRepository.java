@@ -7,7 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static com.aravo.library.data.repository.EntityRowMappers.newWorkMapper;
 
-@Component
+@Repository
 public class WorkRepository implements CrudRepository<Work> {
     private final JdbcTemplate template;
     private final AuthorRepository authorRepository;
