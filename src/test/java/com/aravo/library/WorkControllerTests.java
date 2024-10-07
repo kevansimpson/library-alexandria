@@ -3,6 +3,8 @@ package com.aravo.library;
 import com.aravo.library.controller.WorkController;
 import com.aravo.library.data.WorkFormat;
 import com.aravo.library.data.entity.*;
+import com.aravo.library.data.repository.AuthorRepository;
+import com.aravo.library.data.repository.WorkRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -27,6 +29,10 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * This test relies on seed data defined in
+ * {@link com.aravo.library.config.LibraryConfiguration#loadSeedData(AuthorRepository, WorkRepository)}
+ */
 @SuppressWarnings({"rawtypes"})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class WorkControllerTests {
@@ -122,7 +128,6 @@ class WorkControllerTests {
         assertThat(findNone.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
-
     @Test @DirtiesContext
     void testCannotDeleteMissingWork() {
         ResponseEntity<Work> entity = workController.deleteWork(1000);
@@ -130,7 +135,49 @@ class WorkControllerTests {
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
-     private void verifyNewWork(Work madeUp, String appended) {
+    @Test @DirtiesContext
+    void testWorkRemoveAuthor() {
+        ResponseEntity<Work> entity = workController.findWork(1);
+        assertThat(entity).isNotNull();
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Work work = objectMapper.convertValue(entity.getBody(), new TypeReference<>() {});
+        assertThat(work.getAuthors().size()).isEqualTo(1);
+        Author author = work.getAuthors().iterator().next();
+        work.removeAuthor(100);
+        assertThat(work.getAuthors().size()).isEqualTo(1);
+        work.removeAuthor(author.getId());
+        assertThat(work.getAuthors().size()).isEqualTo(0);
+    }
+
+    @Test @DirtiesContext
+    void testWorkRemoveCitation() {
+        ResponseEntity<Work> entity = workController.findWork(8);
+        assertThat(entity).isNotNull();
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Work work = objectMapper.convertValue(entity.getBody(), new TypeReference<>() {});
+        assertThat(work.getCitations().size()).isEqualTo(1);
+        Citation citation = work.getCitations().iterator().next();
+        work.removeCitation(100);
+        assertThat(work.getCitations().size()).isEqualTo(1);
+        work.removeCitation(citation.getId());
+        assertThat(work.getCitations().size()).isEqualTo(0);
+    }
+
+    @Test @DirtiesContext
+    void testWorkRemoveFormat() {
+        ResponseEntity<Work> entity = workController.findWork(1);
+        assertThat(entity).isNotNull();
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Work work = objectMapper.convertValue(entity.getBody(), new TypeReference<>() {});
+        assertThat(work.getFormats().size()).isEqualTo(1);
+        AvailableFormat format = work.getFormats().iterator().next();
+        work.removeFormat(100);
+        assertThat(work.getFormats().size()).isEqualTo(1);
+        work.removeFormat(format.getId());
+        assertThat(work.getFormats().size()).isEqualTo(0);
+    }
+
+    private void verifyNewWork(Work madeUp, String appended) {
         assertThat(madeUp).isNotNull();
         assertThat(madeUp.getId()).isEqualTo(10);
         assertThat(madeUp.getTitle()).isEqualTo("Made Up Book" + appended);

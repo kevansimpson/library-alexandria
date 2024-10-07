@@ -3,6 +3,8 @@ package com.aravo.library;
 import com.aravo.library.controller.AuthorController;
 import com.aravo.library.data.entity.Author;
 import com.aravo.library.data.entity.Work;
+import com.aravo.library.data.repository.AuthorRepository;
+import com.aravo.library.data.repository.WorkRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -20,6 +22,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
+/**
+ * This test relies on seed data defined in
+ * {@link com.aravo.library.config.LibraryConfiguration#loadSeedData(AuthorRepository, WorkRepository)}
+ */
 @SuppressWarnings({"rawtypes"})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class AuthorControllerTests {

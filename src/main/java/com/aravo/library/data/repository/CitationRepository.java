@@ -3,6 +3,7 @@ package com.aravo.library.data.repository;
 import com.aravo.library.data.entity.Citation;
 import com.aravo.library.data.entity.Work;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -62,7 +63,12 @@ public class CitationRepository implements CrudRepository<Citation> {
 
     @Override
     public Citation findById(long id) {
-        return template.queryForObject("SELECT * FROM CITATIONS WHERE ID = ?", newCitationMapper(), id);
+        try {
+            return template.queryForObject("SELECT * FROM CITATIONS WHERE ID = ?", newCitationMapper(), id);
+        }
+        catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
